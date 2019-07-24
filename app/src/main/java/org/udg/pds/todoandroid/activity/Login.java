@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -38,10 +39,14 @@ public class Login extends AppCompatActivity {
 
         mTodoService = ((TodoApp)this.getApplication()).getAPI();
 
-        Button b = (Button)findViewById(R.id.login_button);
+        ImageButton b = (ImageButton)findViewById(R.id.login_button);
         // This is teh listener that will be used when the user presses the "Login" button
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                /*Intent entrarApp = new Intent(Login.this, ActivitatClient.class);
+                startActivity(entrarApp);*/
+
                 EditText u = (EditText) Login.this.findViewById(R.id.login_username);
                 EditText p = (EditText) Login.this.findViewById(R.id.login_password);
                 Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
