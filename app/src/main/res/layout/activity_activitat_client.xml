@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8BB6F5"
+    tools:context=".activity.ActivitatClient">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu"/>
+
+    <EditText
+        android:id="@+id/nomClient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B9FFFFFF"
+        android:textAlignment="center"
+        android:hint="Nombre cliente"/>
+
+    <TextView
+        android:id="@+id/titol1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="165dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Sexo"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="145dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonH"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="150dp"
+            android:text="Hombre"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonM"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:text="Mujer"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/titol2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Corte"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="255dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-smallcaps"/>
+
+    <RadioGroup
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="235dp">
+
+        <RadioButton
+            android:id="@+id/rBCorte1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="108dp"
+            android:text="Normal"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"/>
+
+        <RadioButton
+            android:id="@+id/rBCorte2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="14dp"
+            android:text="Tipo 1"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"/>
+
+        <RadioButton
+            android:id="@+id/rBCorte3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="14dp"
+            android:text="Tipo 2"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"/>
+
+    </RadioGroup>
+
+
+    <ImageButton
+        android:id="@+id/ButtonProductes"
+        android:layout_width="890px"
+        android:layout_height="130px"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="355dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_buttonproductes" />
+
+    <TextView
+        android:id="@+id/tvItemSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="420dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Ningún producto seleccionado"
+        android:textColor="#FFFFFF" />
+
+
+    <ImageButton
+        android:id="@+id/imgButtonGuardar"
+        android:layout_width="110dp"
+        android:layout_height="43dp"
+        android:layout_alignEnd="@+id/nav_view"
+        android:layout_alignBottom="@+id/nav_view"
+        android:layout_marginVertical="100dp"
+        android:layout_marginRight="25dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_buttonguardar" />
+
+    <TextView
+        android:id="@+id/textTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nav_view"
+        android:layout_alignBottom="@id/nav_view"
+        android:layout_marginLeft="32dp"
+        android:layout_marginVertical="120dp"
+        android:fontFamily="@font/lemonyellowsun"
+        android:text="TOTAL: 0€"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

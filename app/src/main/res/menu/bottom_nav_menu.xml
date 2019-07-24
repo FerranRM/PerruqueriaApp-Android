@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navegacio_afegirClient"
+        android:icon="@drawable/ic_iconaafegirclient"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navegacio_calendari"
+        android:icon="@drawable/ic_iconacalendari"
+        android:title="@string/title_dashboard" />
+
+    <item
+        android:id="@+id/navegacio_estadistiques"
+        android:icon="@drawable/ic_iconaestadistiques"
+        android:title="@string/title_notifications" />
+
+    <item
+        android:id="@+id/navegacio_alertes"
+        android:icon="@drawable/ic_iconaalertes"
+        android:title="Alertas" />
+
+    <item
+        android:id="@+id/navegacio_ajustos"
+        android:icon="@drawable/ic_iconaajustos"
+        android:title="Ajustes" />
+
+</menu>
