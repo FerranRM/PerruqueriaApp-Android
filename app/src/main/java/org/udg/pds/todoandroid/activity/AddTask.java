@@ -16,14 +16,9 @@ import org.udg.pds.todoandroid.util.Global;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import java.util.Calendar;
 
 /**
- * Created with IntelliJ IDEA.
- * User: imartin
- * Date: 29/03/13
- * Time: 0:45
  * To change this template use File | Settings | File Templates.
  */
 
@@ -39,11 +34,11 @@ public class AddTask extends AppCompatActivity implements Callback<IdObject> {
       Bundle b = msg.getData();
       Integer hour = b.getInt("hour");
       Integer minute = b.getInt("minute");
-      TextView tl = (TextView) findViewById(R.id.afegir_client_hora);
+      //TextView tl = (TextView) findViewById(R.id.afegir_client_hora);
       Calendar cal = Calendar.getInstance();
       cal.set(Calendar.HOUR, hour);
       cal.set(Calendar.MINUTE, minute);
-      tl.setText(Global.TIME_ONLY_FORMAT.format(cal.getTime()));
+      //tl.setText(Global.TIME_ONLY_FORMAT.format(cal.getTime()));
     }
   };
 
@@ -157,13 +152,21 @@ public class AddTask extends AppCompatActivity implements Callback<IdObject> {
     FragmentManager fm = getFragmentManager();
 
 
-    Button dateButton = (Button) findViewById(R.id.at_date_limit_button);
+    Button dateButton = (Button) findViewById(R.id.afegir_client_hora_button);
     // Show the date selection dialog when the "Set" button is pressed
     dateButton.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         DatePickerFragment dialog = new DatePickerFragment();
         dialog.setHandler(mHandlerD);
         dialog.show(getFragmentManager(), "timepickerdialog");
+
+        TimePickerDialog horaPickerDialog = new TimePickerDialog(AddTask.this, new TimePickerDialog.OnTimeSetListener() {
+          @Override
+          public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            dateButton.setText(hourOfDay + ":" + minute);
+          }
+        },0,0,false);
+        horaPickerDialog.show();
       }
     });
 

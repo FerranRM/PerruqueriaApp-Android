@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">D.Tellez</string>
+    <string name="app_name">D.Tellez Barber</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -12,7 +12,7 @@
     <string name="date_created">Date created:</string>
     <string name="task_text">Text:</string>
     <string name="hora_visita">Hora visita:</string>
-    <string name="button_set">Set</string>
+    <string name="button_set">Escoger hora</string>
     <string name="nombre_cliente">Time limit:</string>
     <string name="button_save">Save</string>
     <string name="text_favorites">Favorites</string>
@@ -24,19 +24,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_splash_screen">D.Tellez</string>
     <string name="titol1_perruqueria">D.Tellez</string>
-    <string name="title_activity_activitat_client">ActivitatClient</string>
     <string name="title_home">Cliente</string>
     <string name="title_dashboard">Calendario</string>
     <string name="title_notifications">Estadisticas</string>
-
-    <string-array name="productes_comprar">
-        <item>Crema cara</item>
-        <item>Laca</item>
-        <item>Cera</item>
-        <item>Polvos</item>
-        <item>Champú</item>
-        <item>Aceite barba</item>
-        <item>Gomina</item>
-    </string-array>
 
 </resources>

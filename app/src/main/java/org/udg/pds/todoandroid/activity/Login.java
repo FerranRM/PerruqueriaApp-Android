@@ -1,17 +1,15 @@
 package org.udg.pds.todoandroid.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
-import org.udg.pds.todoandroid.entity.User;
+import org.udg.pds.todoandroid.entity.Perruquer;
 import org.udg.pds.todoandroid.entity.UserLogin;
 import org.udg.pds.todoandroid.rest.TodoApi;
 import retrofit2.Call;
@@ -20,7 +18,7 @@ import retrofit2.Response;
 
 /**
  * Created with IntelliJ IDEA.
- * User: imartin
+ * Perruquer: imartin
  * Date: 28/03/13
  * Time: 16:01
  * To change this template use File | Settings | File Templates.
@@ -55,27 +53,28 @@ public class Login extends AppCompatActivity {
 
     }
     // This method is called when the "Login" button is pressed in the Login fragment
-    public void checkCredentials(String username, String password) {
+    public void checkCredentials(String nomPerruquer, String contrasenya) {
         UserLogin ul = new UserLogin();
-        ul.username = username;
-        ul.password = password;
-        Call<User> call = mTodoService.login(ul);
-        call.enqueue(new Callback<User>() {
+        ul.nomPerruquer = nomPerruquer;
+        ul.contrasenya = contrasenya;
+        Call<Perruquer> call = mTodoService.login(ul);
+        call.enqueue(new Callback<Perruquer>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<Perruquer> call, Response<Perruquer> response) {
 
                 if (response.isSuccessful()) {
-                    Login.this.startActivity(new Intent(Login.this, NavigationActivity.class));
+                    Login.this.startActivity(new Intent(Login.this, ActivitatClient.class));
                     Login.this.finish();
                 } else {
-                    Toast toast = Toast.makeText(Login.this, "Error logging in", Toast.LENGTH_SHORT);
+
+                    Toast toast = Toast.makeText(Login.this, "Error en el login "+response.raw(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast toast = Toast.makeText(Login.this, "Error logging in", Toast.LENGTH_SHORT);
+            public void onFailure(Call<Perruquer> call, Throwable t) {
+                Toast toast = Toast.makeText(Login.this, "Error logging in 2", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

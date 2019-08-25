@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/activitat_ajustos"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8BB6F5"
+    tools:context=".activity.Ajustos">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu"/>
+
+    <TextView
+        android:id="@+id/titolCalendariDia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:gravity="center_horizontal"
+        android:text="AJUSTES"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/sortirCompte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Salir"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="32dp"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/modificarPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modificar Perfil"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="70dp"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/eliminarCompteEmpleat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eliminar cuenta empleado"
+        android:layout_marginTop="210dp"
+        android:layout_marginLeft="70dp"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:id="@+id/switchNotificacions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notificaciones"
+        android:layout_marginTop="260dp"
+        android:layout_marginLeft="32dp"
+        android:switchPadding="22dp"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
+        android:textStyle="bold"/>
+
+
+</RelativeLayout>

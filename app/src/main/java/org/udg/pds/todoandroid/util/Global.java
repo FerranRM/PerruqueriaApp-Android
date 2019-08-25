@@ -5,9 +5,6 @@ import java.util.TimeZone;
 
 /**
  * Created with IntelliJ IDEA.
- * User: imartin
- * Date: 30/03/13
- * Time: 10:47
  * To change this template use File | Settings | File Templates.
  */
 

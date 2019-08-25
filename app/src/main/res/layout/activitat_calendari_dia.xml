@@ -27,14 +27,14 @@
         android:id="@+id/titolCalendariDia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DOMINGO\n7 de Junio"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-smallcaps"
-        android:textColor="#FFFFFF"
         android:gravity="center_horizontal"
-        android:textSize="30sp"
-        android:textStyle="bold"/>
+        android:text="DOMINGO\n7 de Junio"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
 
     <android.support.v7.widget.RecyclerView
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="120dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="160dp" />
 
@@ -51,7 +51,7 @@
         android:layout_width="165dp"
         android:layout_height="47dp"
         android:layout_alignBottom="@+id/nav_view"
-        android:layout_marginVertical="98dp"
+        android:layout_marginVertical="93dp"
         android:layout_marginLeft="37dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
@@ -64,12 +64,12 @@
         android:layout_height="47dp"
         android:layout_alignEnd="@+id/nav_view"
         android:layout_alignBottom="@+id/nav_view"
-        android:layout_marginVertical="98dp"
+        android:layout_marginVertical="93dp"
         android:layout_marginRight="37dp"
         android:background="@android:color/transparent"
+        android:onClick="onClickAfegirClient"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonafegirclient"
-        android:onClick="onClickAfegirClient"/>
+        app:srcCompat="@drawable/ic_buttonafegirclient" />
 
 
 </RelativeLayout>

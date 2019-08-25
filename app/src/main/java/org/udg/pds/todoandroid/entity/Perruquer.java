@@ -1,7 +1,7 @@
 package org.udg.pds.todoandroid.entity;
 
-
-public class UserLogin {
+public class Perruquer {
+  public long id;
   public String nomPerruquer;
-  public String contrasenya;
+  public String email;
 }

@@ -12,4 +12,12 @@ public class Task {
   public Date dateCreated;
   public Boolean completed;
   public Long userId;
+
+
+  public Task(Date dateCreated, Date dateLimit, Boolean completed, String text) {
+    this.dateCreated = dateCreated;
+    this.dateLimit = dateLimit;
+    this.completed = completed;
+    this.text = text;
+  }
 }

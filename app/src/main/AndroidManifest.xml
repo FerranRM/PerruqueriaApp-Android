@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.udg.pds.todoandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -7,24 +8,58 @@
     <application
         android:name=".TodoApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_icona"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:usesCleartextTraffic="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:name">
+        <activity
+            android:name=".activity.ActivitatClient"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+        android:name=".activity.Calendari"
+        android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.CalendariDia"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Estadistiques"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".activity.Estad_TotalVendes"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Estad_BarresDiners"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Estad_BarresClients"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Estad_BarresCompararSexes"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Estad_BarresCompararDiners"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Alertes"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.Ajustos"
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".activity.Login"
             android:label="@string/app_name">
         </activity>
-        <activity android:name=".activity.NavigationActivity">
-        </activity>
+        <activity android:name=".activity.NavigationActivity"></activity>
         <activity
             android:name=".activity.AddTask"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".activity.NavDrawerActivity"
             android:label="@string/title_activity_nd"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".activity.SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -32,7 +67,6 @@
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
