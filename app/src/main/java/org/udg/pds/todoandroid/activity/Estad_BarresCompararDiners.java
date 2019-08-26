@@ -160,7 +160,7 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         Cartesian cartesian = AnyChart.column();
 
-        Column column1 = cartesian.column(anyActual);
+        Column column1 = cartesian.column(anyPassat);
         column1.name("Año pasado")
                 .color("HotPink");
         column1.tooltip()

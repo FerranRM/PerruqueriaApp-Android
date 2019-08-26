@@ -103,8 +103,9 @@ public class Estad_BarresClients extends AppCompatActivity {
 
         Calendar data2 = GregorianCalendar.getInstance();
         Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
+        Date data2F = data2.getTime();
 
-        Call<List<Client>> call = mTodoService.listClientsDates(data1,data2.getTime());
+        Call<List<Client>> call = mTodoService.listClientsDates(data1,data2F);
 
         call.enqueue(new Callback<List<Client>>() {
             @Override

@@ -8,6 +8,7 @@ import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.Perruquer;
 import org.udg.pds.todoandroid.entity.UserLogin;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,6 +29,9 @@ public interface TodoApi {
 
   @GET("/perruquers/check")
   Call<String> check();
+
+  @POST("/perruquers/logout")
+  Call<OkHttpClient> logout();
 
 
 
