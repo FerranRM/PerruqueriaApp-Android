@@ -1,17 +1,12 @@
 package org.udg.pds.todoandroid.activity;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
@@ -19,9 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -43,7 +35,7 @@ public class Calendari extends AppCompatActivity {
         calendari.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Intent intentCanvi = new Intent(Calendari.this, CalendariDia.class);
+                Intent intentCanvi = new Intent(Calendari.this, Reserva.class);
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, dayOfMonth);
@@ -76,17 +68,15 @@ public class Calendari extends AppCompatActivity {
                     Intent intent1 = new Intent(Calendari.this, ActivitatClient.class);
                     startActivity(intent1);
                     break;
-                case R.id.navegacio_calendari:
-                    Intent intent2 = new Intent(Calendari.this, CalendariDia.class);
+                case R.id.navegacio_reserves:
+                    Intent intent2 = new Intent(Calendari.this, Reserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
                     Intent intent3 = new Intent(Calendari.this, Estadistiques.class);
                     startActivity(intent3);
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(Calendari.this, Alertes.class);
-                    startActivity(intent4);
+                case R.id.navegacio_calendari:
                     break;
                 case R.id.navegacio_ajustos:
                     Intent intent5 = new Intent(Calendari.this, Ajustos.class);

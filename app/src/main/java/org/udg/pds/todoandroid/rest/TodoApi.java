@@ -4,6 +4,7 @@ import org.udg.pds.todoandroid.entity.Client;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.Producte;
 import org.udg.pds.todoandroid.entity.Reserva;
+import org.udg.pds.todoandroid.entity.TallCabells;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.Perruquer;
 import org.udg.pds.todoandroid.entity.UserLogin;
@@ -11,6 +12,7 @@ import org.udg.pds.todoandroid.entity.UserLogin;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -18,7 +20,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,10 @@ public interface TodoApi {
   Call<String> check();
 
   @POST("/perruquers/logout")
-  Call<OkHttpClient> logout();
+  Call<String> logout();
+
+  @GET("/perruquers/me")
+  Call<Perruquer> getIdPerruquer();
 
 
 
@@ -59,9 +63,9 @@ public interface TodoApi {
   @POST("/clients/{id}/productes")
   Call<ResponseBody> addProductes(@Body List<Long> productes, @Path("id") String id);
 
-  @GET("/clients/")
-  Call<List<Client>> listClientsDates(@Query("data1") Date data1, @Query("data2") Date data2);
-
+  @GET("/clients?{data1}&?{data2}")
+  Call<List<Client>> listAllClients(@Query("data1") Date data1, @Query("data2") Date data2);
+//POSTMAN: http://localhost:8080/clients?data1=2018-07-01T17:36:00&data2=2018-08-20T17:36:00
 
 
 
@@ -91,6 +95,14 @@ public interface TodoApi {
 
   @DELETE("/reserves/{id}")
   Call<ResponseBody> deleteProducte(@Path("id") String id);
+
+
+
+  @GET("/tallCabells")
+  Call<List<TallCabells>> getTallsCabells();
+
+  @GET("/tallCabells/{id}")
+  Call<TallCabells> getTallCabells(@Path("id") String id);
 
 }
 

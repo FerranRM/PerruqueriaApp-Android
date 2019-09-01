@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:id="@+id/activitat_alertes"
+    android:id="@+id/activitat_calendari_dia"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fons1"
-    tools:context=".activity.Alertes">
+    android:background="#8BB6F5"
+    tools:context=".activity.Reserva">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"
@@ -16,7 +16,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -31,12 +31,34 @@
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
-        android:text="ALERTAS\n(Muy pronto)"
+        android:text="DOMINGO\n7 de Junio"
         android:textColor="#FFFFFF"
         android:textSize="28sp"
         android:textStyle="bold" />
 
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rVclients"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="160dp" />
+
+    <Button
+        android:id="@+id/imgButtonAfegirClient"
+        android:layout_width="205dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/nav_view"
+        android:layout_marginVertical="93dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Añadir reserva"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="onClickAfegirClient" />
 
 
 </RelativeLayout>

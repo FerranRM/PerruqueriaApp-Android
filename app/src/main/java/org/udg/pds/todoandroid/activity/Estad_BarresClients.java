@@ -58,14 +58,14 @@ public class Estad_BarresClients extends AppCompatActivity {
                     Intent intent1 = new Intent(Estad_BarresClients.this, ActivitatClient.class);
                     startActivity(intent1);
                     break;
-                case R.id.navegacio_calendari:
-                    Intent intent2 = new Intent(Estad_BarresClients.this, CalendariDia.class);
+                case R.id.navegacio_reserves:
+                    Intent intent2 = new Intent(Estad_BarresClients.this, Reserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(Estad_BarresClients.this, Alertes.class);
+                case R.id.navegacio_calendari:
+                    Intent intent4 = new Intent(Estad_BarresClients.this, Calendari.class);
                     startActivity(intent4);
                     break;
                 case R.id.navegacio_ajustos:
@@ -105,13 +105,13 @@ public class Estad_BarresClients extends AppCompatActivity {
         Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
         Date data2F = data2.getTime();
 
-        Call<List<Client>> call = mTodoService.listClientsDates(data1,data2F);
+        Call<List<Client>> call = mTodoService.listAllClients(data1,data2F);
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
                 if (response.isSuccessful()) {
-                    tractarDades(response.body());
+                    tractarDades(response.body(), data2.get(Calendar.YEAR)-1);
                 } else {
                     Toast.makeText(Estad_BarresClients.this, "Error cargando datos", Toast.LENGTH_LONG).show();
                 }
@@ -128,24 +128,27 @@ public class Estad_BarresClients extends AppCompatActivity {
     //Pre: clients no és buid
     //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de clients fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
-    public void tractarDades(Collection<Client> clients) {
+    public void tractarDades(Collection<Client> clients, int anyAnterior) {
         List<DataEntry> data = new ArrayList<>();
         Integer total = 0;
         String mes = null;
+        String mesInicial = null;
         for(Client auxClient : clients){
             if (mes==null){ //El primer client (inicialitzem les dues variables)
                 mes = obtenirNomMes(auxClient.getDataClient());
+                mesInicial = mes;
                 total ++;
             }
             else if (!obtenirNomMes(auxClient.getDataClient()).equals(mes)){    //Si el mes del client auxClient és diferent al de anterior
-                data.add(new ValueDataEntry(mes, total));
+                data.add(new ValueDataEntry(mes+" "+anyAnterior, total));
                 mes = obtenirNomMes(auxClient.getDataClient());
                 total = 1;
+                if (mes.equals(mesInicial)) anyAnterior++;
             }
             else total ++;
 
         }
-        data.add(new ValueDataEntry(mes, total));   //Afegim el darrer mes calculat
+        data.add(new ValueDataEntry(mes+" "+anyAnterior, total));   //Afegim el darrer mes calculat
 
         dibuixarGrafic(data);
     }

@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.IdObject;
-import org.udg.pds.todoandroid.entity.Reserva;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.text.SimpleDateFormat;
@@ -41,28 +40,28 @@ import retrofit2.Response;
 
 import static java.util.Calendar.getInstance;
 
-public class CalendariDia extends AppCompatActivity {
+public class Reserva extends AppCompatActivity {
 
     TodoApi mTodoService;
 
     private String missatge;
-    public ArrayList<Reserva> llistaReserves;
-    private RecyclerView mRecyclerView;
-    private AdaptadorLlistaDies mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    public ArrayList<org.udg.pds.todoandroid.entity.Reserva> llistaReserves;
+    private RecyclerView mRecyclerView;     //RecyclerView de la llista de reserves
+    private AdaptadorLlistaDies mAdapter;   //Adaptador de reserves
+    private RecyclerView.LayoutManager mLayoutManager;  //Layout manager del recyclerview
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activitat_calendari_dia);
+        setContentView(R.layout.activitat_reserva);
 
         mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
 
         //Creació de la barra de navegació dels 4 menús
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setSelectedItemId(R.id.navegacio_calendari);
+        navView.setSelectedItemId(R.id.navegacio_reserves);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         String data = dataActual(); //Convertim la data que estem consultant en un format particular
@@ -85,21 +84,21 @@ public class CalendariDia extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navegacio_afegirClient:
-                    Intent intent1 = new Intent(CalendariDia.this, ActivitatClient.class);
+                    Intent intent1 = new Intent(Reserva.this, ActivitatClient.class);
                     startActivity(intent1);
                     break;
-                case R.id.navegacio_calendari:
+                case R.id.navegacio_reserves:
                     break;
                 case R.id.navegacio_estadistiques:
-                    Intent intent3 = new Intent(CalendariDia.this, Estadistiques.class);
+                    Intent intent3 = new Intent(Reserva.this, Estadistiques.class);
                     startActivity(intent3);
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(CalendariDia.this, Alertes.class);
+                case R.id.navegacio_calendari:
+                    Intent intent4 = new Intent(Reserva.this, Calendari.class);
                     startActivity(intent4);
                     break;
                 case R.id.navegacio_ajustos:
-                    Intent intent5 = new Intent(CalendariDia.this, Ajustos.class);
+                    Intent intent5 = new Intent(Reserva.this, Ajustos.class);
                     startActivity(intent5);
                     break;
             }
@@ -109,9 +108,9 @@ public class CalendariDia extends AppCompatActivity {
 
 
     // Comparador entre dues Reserves (en funció de les seves dates)
-    Comparator<Reserva> comparator = new Comparator<Reserva>() {
+    Comparator<org.udg.pds.todoandroid.entity.Reserva> comparator = new Comparator<org.udg.pds.todoandroid.entity.Reserva>() {
         @Override
-        public int compare(Reserva r1, Reserva r2) {
+        public int compare(org.udg.pds.todoandroid.entity.Reserva r1, org.udg.pds.todoandroid.entity.Reserva r2) {
             return r1.getDataReserva().compareTo(r2.getDataReserva());
         }
     };
@@ -122,12 +121,12 @@ public class CalendariDia extends AppCompatActivity {
     public void crearLlista(String data) {
         llistaReserves = new ArrayList<>();
 
-        Call<List<Reserva>> call = mTodoService.getReserves();
-        call.enqueue(new Callback<List<Reserva>>() {
+        Call<List<org.udg.pds.todoandroid.entity.Reserva>> call = mTodoService.getReserves();
+        call.enqueue(new Callback<List<org.udg.pds.todoandroid.entity.Reserva>>() {
             @Override
-            public void onResponse(Call<List<Reserva>> call, Response<List<Reserva>> response) {
+            public void onResponse(Call<List<org.udg.pds.todoandroid.entity.Reserva>> call, Response<List<org.udg.pds.todoandroid.entity.Reserva>> response) {
                 if (response.isSuccessful()) {
-                    for(Reserva auxReserva : response.body()){
+                    for(org.udg.pds.todoandroid.entity.Reserva auxReserva : response.body()){
                         if (esDataCorresponent(data, auxReserva.getDataReserva())) {
                             llistaReserves.add(auxReserva);
                         }
@@ -135,14 +134,14 @@ public class CalendariDia extends AppCompatActivity {
                     llistaReserves.sort(comparator);
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    Toast toast = Toast.makeText(CalendariDia.this, "Error obteniendo listado de reservas", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Reserva.this, "Error obteniendo listado de reservas", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Reserva>> call, Throwable t) {
-                Toast toast = Toast.makeText(CalendariDia.this, "Error 2 obteniendo listado de reservas", Toast.LENGTH_SHORT);
+            public void onFailure(Call<List<org.udg.pds.todoandroid.entity.Reserva>> call, Throwable t) {
+                Toast toast = Toast.makeText(Reserva.this, "Error 2 obteniendo listado de reservas", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -262,18 +261,11 @@ public class CalendariDia extends AppCompatActivity {
     }
 
 
-    //Botó canvi a pantalla calendari
-    public void onClickCalendari(View v) {
-        Intent intent = new Intent(CalendariDia.this, Calendari.class);
-        startActivity(intent);
-    }
-
-
     //Botó afegir client
     public void onClickAfegirClient(View view) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CalendariDia.this);
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Reserva.this);
 
-        LayoutInflater inflater = CalendariDia.this.getLayoutInflater();
+        LayoutInflater inflater = Reserva.this.getLayoutInflater();
         View infoClient = inflater.inflate(R.layout.afegir_client, null);
 
         EditText eT_nomClient = infoClient.findViewById(R.id.afegir_client_nom);
@@ -289,7 +281,7 @@ public class CalendariDia extends AppCompatActivity {
 
                     Date data = dataActual(horaClient);     //Obtenim la data en la que s'està fent la reserva i li afegim la hora que s'ha entrat
 
-                    Reserva novaReserva = new Reserva(data, nomClient);     //Assignem valors a la Reserva
+                    org.udg.pds.todoandroid.entity.Reserva novaReserva = new org.udg.pds.todoandroid.entity.Reserva(data, nomClient);     //Assignem valors a la Reserva
 
                     missatge = "Reserva añadida!";
                     afegirReserva(novaReserva);  //Afegim la nova reserva
@@ -310,8 +302,8 @@ public class CalendariDia extends AppCompatActivity {
     //Pre: novaReserva és correcte
     //Post: s'afegeix la reserva a la BD i a la llista de Reserves que es veu per pantalla, actualitzant-la després.
     //      Altrament, si hi ha un error es mostra per pantalla.
-    void afegirReserva(Reserva novaReserva) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CalendariDia.this);
+    void afegirReserva(org.udg.pds.todoandroid.entity.Reserva novaReserva) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Reserva.this);
         Call<IdObject> call = mTodoService.addReseva(novaReserva);
         call.enqueue(new Callback<IdObject>() {
             @Override
@@ -323,17 +315,17 @@ public class CalendariDia extends AppCompatActivity {
 
                     mAdapter.notifyDataSetChanged();    //Actualitzem canvis
 
-                    Toast toast = Toast.makeText(CalendariDia.this, missatge, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Reserva.this, missatge, Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    Toast toast = Toast.makeText(CalendariDia.this, "Error al añadir la reserva", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Reserva.this, "Error al añadir la reserva", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
 
             @Override
             public void onFailure(Call<IdObject> call, Throwable t) {
-                Toast toast = Toast.makeText(CalendariDia.this, "Error 2 al añadir la reserva", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Reserva.this, "Error 2 al añadir la reserva", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -347,7 +339,7 @@ public class CalendariDia extends AppCompatActivity {
         // Es mostra un rellotje per pantalla a l'hora de fer click al botó 'Escoger hora'
         dateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                TimePickerDialog horaPickerDialog = new TimePickerDialog(CalendariDia.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog horaPickerDialog = new TimePickerDialog(Reserva.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         if (minute<10 && hourOfDay>9) dateButton.setText(hourOfDay + ":0" + minute);   //Possem un 0 davant per als minuts (Si és < 10)
@@ -364,9 +356,9 @@ public class CalendariDia extends AppCompatActivity {
     //Pre: posicio existeix a llistaReserves
     //Post: s'elimina la reserva de la BD i, per tant, del llistat actual que es mostra per pantalla.
     public void removeItem(int posicio) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CalendariDia.this);
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Reserva.this);
 
-        Reserva reservaEliminar = llistaReserves.get(posicio);
+        org.udg.pds.todoandroid.entity.Reserva reservaEliminar = llistaReserves.get(posicio);
 
         Call<ResponseBody> call = mTodoService.deleteReserva(reservaEliminar.getId().toString());
         call.enqueue(new Callback<ResponseBody>() {
@@ -379,18 +371,18 @@ public class CalendariDia extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();    //Actualitzem canvis
 
                     if (!missatge.equals("Modificación echa!")) {
-                        Toast toast = Toast.makeText(CalendariDia.this, missatge, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(Reserva.this, missatge, Toast.LENGTH_SHORT);
                         toast.show();
                     }
                 } else {
-                    Toast toast = Toast.makeText(CalendariDia.this, "Error al eliminar la reserva", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Reserva.this, "Error al eliminar la reserva", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast toast = Toast.makeText(CalendariDia.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Reserva.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -409,9 +401,9 @@ public class CalendariDia extends AppCompatActivity {
         cal.setTime(llistaReserves.get(position).getDataReserva());
         String horaR1 = cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CalendariDia.this);
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Reserva.this);
 
-        LayoutInflater inflater = CalendariDia.this.getLayoutInflater();
+        LayoutInflater inflater = Reserva.this.getLayoutInflater();
         View infoClient = inflater.inflate(R.layout.afegir_client, null);
 
         EditText eT_nomClient = infoClient.findViewById(R.id.afegir_client_nom);
@@ -429,7 +421,7 @@ public class CalendariDia extends AppCompatActivity {
 
                         Date pData = dataActual(horaClient);     //Obtenim la data en la que s'està fent la reserva i li afegim la hora que s'ha entrat
 
-                        Reserva novaReserva = new Reserva(pData, nomClient);     //Assignem valors a la Reserva
+                        org.udg.pds.todoandroid.entity.Reserva novaReserva = new org.udg.pds.todoandroid.entity.Reserva(pData, nomClient);     //Assignem valors a la Reserva
 
                         removeItem(position);   //Primer eliminem l'antic
                         afegirReserva(novaReserva);     //I després afegim el nou

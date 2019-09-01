@@ -36,6 +36,7 @@
         android:layout_marginTop="317dp"
         android:hint="Introducir usuario"
         android:textColorHint="#A8FFFFFF"
+        android:textColor="#FFFFFF"
         android:textStyle="italic"/>
 
     <TextView
@@ -59,16 +60,19 @@
         android:hint="Introducir contraseña"
         android:inputType="textPassword"
         android:textColorHint="#A8FFFFFF"
+        android:textColor="#FFFFFF"
         android:textStyle="italic"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/login_button"
-        android:layout_width="845px"
-        android:layout_height="128px"
+        android:layout_width="810px"
+        android:layout_height="135px"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="600dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonentrar"/>
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="INICIAR SESSIÓN"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
 
 </RelativeLayout>

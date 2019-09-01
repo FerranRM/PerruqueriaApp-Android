@@ -43,7 +43,7 @@
         android:layout_marginLeft="36dp"
         android:layout_marginTop="165dp"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="Sexo"
+        android:text="Género"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -78,101 +78,74 @@
 
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/titol2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Corte"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="255dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:fontFamily="sans-serif-smallcaps"/>
-
-    <RadioGroup
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_marginTop="235dp">
-
-        <RadioButton
-            android:id="@+id/rBCorte1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="108dp"
-            android:text="Normal"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textStyle="bold"
-            android:buttonTint="#FFFFFF"
-            android:textColor="#FFFFFF"/>
-
-        <RadioButton
-            android:id="@+id/rBCorte2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="14dp"
-            android:text="Tipo 1"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textStyle="bold"
-            android:buttonTint="#FFFFFF"
-            android:textColor="#FFFFFF"/>
-
-        <RadioButton
-            android:id="@+id/rBCorte3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="14dp"
-            android:text="Tipo 2"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textStyle="bold"
-            android:buttonTint="#FFFFFF"
-            android:textColor="#FFFFFF"/>
-
-    </RadioGroup>
-
-
-    <ImageButton
-        android:id="@+id/ButtonProductes"
-        android:layout_width="890px"
+    <Button
+        android:id="@+id/ButtonTallCabells"
+        android:layout_width="870px"
         android:layout_height="130px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="355dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes" />
+        android:layout_marginTop="245dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="CORTES DE PELO"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvTallCabells"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="310dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Ningún corte de pelo escogido"
+        android:textColor="#FFFFFF" />
+
+
+    <Button
+        android:id="@+id/ButtonProductes"
+        android:layout_width="870px"
+        android:layout_height="130px"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="375dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="PRODUCTOS A COMPRAR"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvItemSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="420dp"
+        android:layout_marginTop="430dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="Ningún producto seleccionado"
         android:textColor="#FFFFFF" />
 
 
-    <ImageButton
+    <Button
         android:id="@+id/imgButtonGuardar"
-        android:layout_width="110dp"
+        android:layout_width="160dp"
         android:layout_height="43dp"
         android:layout_alignEnd="@+id/nav_view"
         android:layout_alignBottom="@+id/nav_view"
         android:layout_marginVertical="100dp"
         android:layout_marginRight="25dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonguardar" />
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Añadir cliente"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:onClick="guardarClient"/>
 
     <TextView
         android:id="@+id/textTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/nav_view"
-        android:layout_alignBottom="@id/nav_view"
-        android:layout_marginLeft="32dp"
-        android:layout_marginVertical="120dp"
+        android:layout_alignBottom="@id/imgButtonGuardar"
+        android:layout_alignTop="@id/imgButtonGuardar"
+        android:layout_marginLeft="25dp"
         android:fontFamily="@font/lemonyellowsun"
         android:text="TOTAL: 0€"
         android:textColor="#FFFFFF"

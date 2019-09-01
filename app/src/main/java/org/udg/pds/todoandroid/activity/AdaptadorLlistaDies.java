@@ -86,7 +86,6 @@ public class AdaptadorLlistaDies extends RecyclerView.Adapter<AdaptadorLlistaDie
 
         holder.mTextView1.setText(reservaActual.getNomReserva());
 
-
         SimpleDateFormat format = new SimpleDateFormat("EEEE, dd/MM/yyyy/HH:mm:ss");
         String hora = (String) DateFormat.format("HH",  reservaActual.getDataReserva());
         String minuts = (String) DateFormat.format("mm",  reservaActual.getDataReserva());

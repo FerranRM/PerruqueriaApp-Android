@@ -35,82 +35,77 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <ImageButton
+    <Button
         android:id="@+id/botoEstdTotalDiners"
-        android:layout_width="890px"
-        android:layout_height="130px"
+        android:layout_width="800px"
+        android:layout_height="180px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="115dp"
-        android:background="@color/cardview_light_background"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Número total de ventas en\nproductos en el último año"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         android:onClick="estdTotalVendes" />
 
-    <ImageButton
+    <Button
         android:id="@+id/botoEstdTotalClients"
-        android:layout_width="890px"
-        android:layout_height="130px"
+        android:layout_width="600px"
+        android:layout_height="180px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="205dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
+        android:layout_marginTop="185dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Total ganancias en\nel último año"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         android:onClick="estdTotalDiners"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/botoEstdTotalSexes"
-        android:layout_width="890px"
-        android:layout_height="130px"
+        android:layout_width="700px"
+        android:layout_height="180px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="295dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
+        android:layout_marginTop="270dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Número total de clientes\nen el último año"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         android:onClick="estdTotaClients"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/botoEstdCompDiners"
-        android:layout_width="890px"
-        android:layout_height="130px"
+        android:layout_width="680px"
+        android:layout_height="200px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="385dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
+        android:layout_marginTop="350dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Comparar número\n total de clientes en\nel último año por sexo"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         android:onClick="estdCompararSexes"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/botoEstdCompDinersMitjana"
-        android:layout_width="890px"
-        android:layout_height="130px"
+        android:layout_width="680px"
+        android:layout_height="180px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="475dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
+        android:layout_marginTop="440dp"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Comparar ganancias\naño pasado y actual"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         android:onClick="estdCompararDiners"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/botoDonutDiners"
-        android:layout_width="890px"
-        android:layout_height="130px"
+        android:layout_width="850px"
+        android:layout_height="180px"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="565dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
-        android:onClick="estdTotalDiners"/>
-
-    <ImageButton
-        android:id="@+id/botoDonutProductes"
-        android:layout_width="890px"
-        android:layout_height="130px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="655dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_buttonproductes"
-        android:onClick="estdTotalDiners"/>
+        android:layout_marginTop="550dp"
+        android:background="@drawable/boto_efecte_vermell"
+        android:text="Total dinero echo\npor cada peluquero"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:onClick="estdPastisTotalDiners"/>
 
 
 </RelativeLayout>

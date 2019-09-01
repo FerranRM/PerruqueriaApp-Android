@@ -7,9 +7,9 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navegacio_calendari"
-        android:icon="@drawable/ic_iconacalendari"
-        android:title="@string/title_dashboard" />
+        android:id="@+id/navegacio_reserves"
+        android:icon="@drawable/ic_iconareserves"
+        android:title="@string/titol_reserves" />
 
     <item
         android:id="@+id/navegacio_estadistiques"
@@ -17,9 +17,9 @@
         android:title="@string/title_notifications" />
 
     <item
-        android:id="@+id/navegacio_alertes"
-        android:icon="@drawable/ic_iconaalertes"
-        android:title="Alertas" />
+        android:id="@+id/navegacio_calendari"
+        android:icon="@drawable/ic_iconacalendari"
+        android:title="@string/title_dashboard" />
 
     <item
         android:id="@+id/navegacio_ajustos"

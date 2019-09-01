@@ -36,55 +36,74 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/sortirCompte"
+    <ImageView
+        android:id="@+id/imatgePerfil"
+        android:layout_width="490px"
+        android:layout_height="510px"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="95dp"
+        android:src="@drawable/noi1" />
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
-        android:layout_marginLeft="32dp"
-        android:background="@android:color/transparent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="295dp"
+        android:textColor="#FFFFFF"
+        android:text="Nom del perruquer" />
+
+    <Button
+        android:id="@+id/modificarImatge"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Modificar imagen"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="modificarImatge"/>
+
+    <Button
+        android:id="@+id/modificarNom"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="420dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/boto_efecte_blanc"
+        android:text="Modificar nombre"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="modificarPerfilPerruquer"/>
+
+    <Button
+        android:id="@+id/sortirCompte"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="510dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/boto_efecte_vermell"
         android:text="Salir de la cuenta"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         android:onClick="tancarSessioPerruquer"/>
 
-    <Button
-        android:id="@+id/modificarPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="165dp"
-        android:layout_marginLeft="70dp"
+
+    <ImageButton
+        android:id="@+id/instagramPerruqueria"
+        android:layout_width="140dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
-        android:text="Modificar Perfil"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
-
-    <Button
-        android:id="@+id/eliminarCompteEmpleat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="215dp"
-        android:layout_marginLeft="70dp"
-        android:background="@android:color/transparent"
-        android:text="Eliminar cuenta empleado"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
-
-    <Switch
-        android:id="@+id/switchNotificacions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Notificaciones"
-        android:layout_marginTop="270dp"
-        android:layout_marginLeft="32dp"
-        android:switchPadding="22dp"
-        android:textColor="#FFFFFF"
-        android:textSize="19sp"
-        android:textStyle="bold"/>
-
+        app:srcCompat="@drawable/instagram"
+        android:scaleType="fitXY"
+        android:onClick="instagramPerruqueria"/>
 
 
 

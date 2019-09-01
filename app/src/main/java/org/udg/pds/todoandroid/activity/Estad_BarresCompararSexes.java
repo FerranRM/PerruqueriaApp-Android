@@ -15,15 +15,10 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
-import com.anychart.core.axes.Linear;
 import com.anychart.core.cartesian.series.Column;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
-import com.anychart.enums.LabelsOverlapMode;
-import com.anychart.enums.Orientation;
 import com.anychart.enums.Position;
-import com.anychart.enums.ScaleStackMode;
-import com.anychart.enums.TooltipDisplayMode;
 import com.anychart.enums.TooltipPositionMode;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +27,6 @@ import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.Client;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,14 +57,14 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
                     Intent intent1 = new Intent(Estad_BarresCompararSexes.this, ActivitatClient.class);
                     startActivity(intent1);
                     break;
-                case R.id.navegacio_calendari:
-                    Intent intent2 = new Intent(Estad_BarresCompararSexes.this, CalendariDia.class);
+                case R.id.navegacio_reserves:
+                    Intent intent2 = new Intent(Estad_BarresCompararSexes.this, Reserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(Estad_BarresCompararSexes.this, Alertes.class);
+                case R.id.navegacio_calendari:
+                    Intent intent4 = new Intent(Estad_BarresCompararSexes.this, Calendari.class);
                     startActivity(intent4);
                     break;
                 case R.id.navegacio_ajustos:
@@ -108,13 +102,13 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         Calendar data2 = GregorianCalendar.getInstance();
         Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
 
-        Call<List<Client>> call = mTodoService.listClientsDates(data1,data2.getTime());
+        Call<List<Client>> call = mTodoService.listAllClients(data1,data2.getTime());
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
                 if (response.isSuccessful()) {
-                    tractarDades(response.body());
+                    tractarDades(response.body(), data2.get(Calendar.YEAR)-1);
                 } else {
                     Toast.makeText(Estad_BarresCompararSexes.this, "Error cargando datos", Toast.LENGTH_LONG).show();
                 }
@@ -131,42 +125,47 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
     //Pre: clients no és buid
     //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
-    public void tractarDades(Collection<Client> clients) {
+    public void tractarDades(Collection<Client> clients, int anyAnterior) {
         List<DataEntry> dataHomes = new ArrayList<>();
         List<DataEntry> dataDones = new ArrayList<>();
         Integer totalH = 0;
         Integer totalD = 0;
         String mesH = null;
         String mesD = null;
+        String mesInicial = null;
         for(Client auxClient : clients){
             if (auxClient.getSexeClient()){ //És Home
                 if (mesH==null){ //El primer client (inicialitzem les dues variables)
                     mesH = obtenirNomMes(auxClient.getDataClient());
+                    if (mesInicial==null) mesInicial = mesH;
                     totalH += auxClient.getPreuTotal();
                 }
                 else if (!obtenirNomMes(auxClient.getDataClient()).equals(mesH)){    //Si el mes del client auxClient és diferent al de anterior
-                    dataHomes.add(new ValueDataEntry(mesH, totalH));
+                    dataHomes.add(new ValueDataEntry(mesH+" "+anyAnterior, totalH));
                     mesH = obtenirNomMes(auxClient.getDataClient());
                     totalH = auxClient.getPreuTotal();
+                    if (mesH.equals(mesInicial)) anyAnterior++;
                 }
                 else totalH += auxClient.getPreuTotal();
             }
             else{
                 if (mesD==null){ //El primer client (inicialitzem les dues variables)
                     mesD = obtenirNomMes(auxClient.getDataClient());
+                    if (mesInicial==null) mesInicial = mesD;
                     totalD += auxClient.getPreuTotal();
                 }
                 else if (!obtenirNomMes(auxClient.getDataClient()).equals(mesD)){    //Si el mes del client auxClient és diferent al de anterior
-                    dataDones.add(new ValueDataEntry(mesD, totalD));
+                    dataDones.add(new ValueDataEntry(mesD+" "+anyAnterior, totalD));
                     mesD = obtenirNomMes(auxClient.getDataClient());
                     totalD = auxClient.getPreuTotal();
+                    if (mesD.equals(mesInicial)) anyAnterior++;
                 }
                 else totalD += auxClient.getPreuTotal();
             }
 
         }
-        dataHomes.add(new ValueDataEntry(mesH, totalH));   //Afegim el darrer mes calculat dels Homes
-        dataDones.add(new ValueDataEntry(mesD, totalD));   //Afegim el darrer mes calculat de les Dones
+        dataHomes.add(new ValueDataEntry(mesH+" "+anyAnterior, totalH));   //Afegim el darrer mes calculat dels Homes
+        dataDones.add(new ValueDataEntry(mesD+" "+anyAnterior, totalD));   //Afegim el darrer mes calculat de les Dones
 
         dibuixarGrafic(dataHomes,dataDones);
     }
@@ -178,8 +177,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         Cartesian cartesian = AnyChart.column();
 
         Column column1 = cartesian.column(dataHomes);
-        column1.name("Homes")
-                .color("HotPink");
+        column1.name("Homes");
         column1.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
@@ -189,7 +187,8 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
                 .format("{%Value} €");
 
         Column column2 = cartesian.column(dataDones);
-        column2.name("Dones");
+        column2.name("Dones")
+                .color("HotPink");
         column2.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)

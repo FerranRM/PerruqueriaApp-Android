@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +20,7 @@ import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.Client;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.Producte;
+import org.udg.pds.todoandroid.entity.TallCabells;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.ArrayList;
@@ -35,8 +36,11 @@ public class ActivitatClient extends AppCompatActivity {
 
     TodoApi mTodoService;
 
-    private ImageButton mOrder;
-    private TextView mItemSelected;
+    private Button botoCabells;
+    private Button botoProductes;
+    private TextView textTallCabells;
+    private TextView textProductes;
+    private List<TallCabells> llistaTalls = new ArrayList<>();
     private List<Producte> llistaProductes = new ArrayList<>();
     private boolean[] checkedItems;
     private ArrayList<Integer> mUserItems = new ArrayList<>();
@@ -49,16 +53,16 @@ public class ActivitatClient extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navegacio_afegirClient:
                     break;
-                case R.id.navegacio_calendari:
-                    Intent intent2 = new Intent(ActivitatClient.this, CalendariDia.class);
+                case R.id.navegacio_reserves:
+                    Intent intent2 = new Intent(ActivitatClient.this, Reserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
                     Intent intent3 = new Intent(ActivitatClient.this, Estadistiques.class);
                     startActivity(intent3);
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(ActivitatClient.this, NavigationActivity.class);
+                case R.id.navegacio_calendari:
+                    Intent intent4 = new Intent(ActivitatClient.this, Calendari.class);
                     startActivity(intent4);
                     break;
                 case R.id.navegacio_ajustos:
@@ -83,14 +87,8 @@ public class ActivitatClient extends AppCompatActivity {
         navView.setSelectedItemId(R.id.navegacio_afegirClient);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        llistatProductes();     //Métode encarregat del llistar els productes que pot comprar el client
-
-        ImageButton bGuardar = findViewById(R.id.imgButtonGuardar);     //Botó per afegir el client
-        bGuardar.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                guardarClient();
-            }
-        });
+        llistatTallCabells();   //Métode encarregat de llistar els tipus de tall de cabells que pot fer-se el client
+        llistatProductes();     //Métode encarregat de llistar els productes que pot comprar el client
     }
 
 
@@ -99,7 +97,7 @@ public class ActivitatClient extends AppCompatActivity {
     //      Cada valor del client (Sexe, tipus de pentinat, preu total, nom, data i productes) està separat per un "/" .
     //      En cas de que hi hagui alguna dada malament es mostra una alerta per pantalla amb el valor erroni.
     //      Altrament es guarda el client a la BD mitjaçant el mètode guardarClientBD.
-    void guardarClient() {
+    public void guardarClient(View view) {
         String clientFet = comprovarSexe();
         if (clientFet=="!") mostrarAlerta("Tipo de sexo no seleccionado");
         else {
@@ -134,7 +132,7 @@ public class ActivitatClient extends AppCompatActivity {
     //Pre: --
     //Post: Retorna un string amb el número identificatiu del tipus de sexe seleccionat, si no hi ha cap seleccionat retorna '!'.
     //      Altrament, si és home 'True', si és dona 'False'.
-    String comprovarSexe(){
+    public String comprovarSexe(){
         RadioButton rBHome = (RadioButton) findViewById(R.id.radioButtonH);
         RadioButton rBDona = (RadioButton) findViewById(R.id.radioButtonM);
         if (rBHome.isChecked()) return "True/";
@@ -144,26 +142,14 @@ public class ActivitatClient extends AppCompatActivity {
 
     //Pre: --
     //Post: Retorna un string amb el número identificatiu del tipus de tall seleccionat, si no hi ha cap seleccionat retorna !.
-    String comprovarTall(){
-        RadioButton rBTall1 = (RadioButton) findViewById(R.id.rBCorte1);
-        RadioButton rBTall2 = (RadioButton) findViewById(R.id.rBCorte2);
-        RadioButton rBTall3 = (RadioButton) findViewById(R.id.rBCorte3);
-        if (rBTall1.isChecked()) {
-            return "1/";
-        }
-        else if (rBTall2.isChecked()) {
-            return "2/";
-        }
-        else if (rBTall3.isChecked()) {
-            return "3/";
-        }
-        else return "!";
+    public String comprovarTall(){
+        return "1/";
     }
 
     //Pre: --
     //Post: retorna un string de llista de tots els productes que estàn seleccionats separats per una coma entre ells.
     //      En cas de que no hi hagui cap seleccionat retorna un string buit: "".
-    String productes(){
+    public String productes(){
         String llistatProd="";
         for (int i = 0; i<mUserItems.size(); i++){
             llistatProd = llistatProd + llistaProductes.get(mUserItems.get(i)).getDescripcioProducte();
@@ -175,7 +161,7 @@ public class ActivitatClient extends AppCompatActivity {
     //Pre: --
     //Post: retorna un string de llista de tots els productes que estàn seleccionats separats per una coma entre ells.
     //      En cas de que no hi hagui cap seleccionat retorna un string buit: "".
-    Integer productesPreu(){
+    public Integer productesPreu(){
         Integer preuTotal = 0;
         for (int i = 0; i<mUserItems.size(); i++){
             preuTotal = preuTotal + llistaProductes.get(mUserItems.get(i)).getPreuProducte();
@@ -185,7 +171,7 @@ public class ActivitatClient extends AppCompatActivity {
 
     //Pre: nomAlerta ha de ser un missatge d'alerta identificatiu de l'error.
     //Post: mostra per pantalla l'alerta amb el titol: ERROR i el missatge entrat per paràmetre.
-    void mostrarAlerta(String nomAlerta){
+    public void mostrarAlerta(String nomAlerta){
         AlertDialog.Builder alerta = new AlertDialog.Builder(ActivitatClient.this);
         alerta.setMessage(nomAlerta);
         alerta.setCancelable(true);
@@ -201,16 +187,50 @@ public class ActivitatClient extends AppCompatActivity {
     }
 
     //Pre: --
-    //Post: s'encarrega del llistat de productes a triar que pot haver comprat el client
-    void llistatProductes() {
-        mOrder = (ImageButton) findViewById(R.id.ButtonProductes);
-        mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
+    //Post: s'encarrega del llistat de tipus de tall de cabells que pot fer-se el client
+    public void llistatTallCabells() {
+        botoCabells = findViewById(R.id.ButtonTallCabells);
+        textTallCabells = (TextView) findViewById(R.id.tvTallCabells);
 
-        obtenirDadesProductes();
-
+        obtenirDadesTallCabells();
     }
 
+    //Pre: --
+    //Post: s'encarrega del llistat de productes a triar que pot haver comprat el client
+    public void llistatProductes() {
+        botoProductes = findViewById(R.id.ButtonProductes);
+        textProductes = (TextView) findViewById(R.id.tvItemSelected);
 
+        obtenirDadesProductes();
+    }
+
+    public void obtenirDadesTallCabells() {
+        Call<List<TallCabells>> call = mTodoService.getTallsCabells();
+        call.enqueue(new Callback<List<TallCabells>>() {
+            @Override
+            public void onResponse(Call<List<TallCabells>> call, Response<List<TallCabells>> response) {
+                if (response.isSuccessful()) {
+                    for(TallCabells auxTallCabells : response.body()){
+                        llistaTalls.add(auxTallCabells);
+                    }
+                    botoTallCabells();
+                } else {
+                    Toast toast = Toast.makeText(ActivitatClient.this, "Error obteniendo listado de productos", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TallCabells>> call, Throwable t) {
+                Toast toast = Toast.makeText(ActivitatClient.this, "Error 2 obteniendo listado de productos", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+    public void botoTallCabells() {
+        //TIENE QUE HACERSE
+    }
 
 
     public void obtenirDadesProductes() {
@@ -241,7 +261,7 @@ public class ActivitatClient extends AppCompatActivity {
     public void butonsBLA() {
         checkedItems = new boolean[llistaProductes.size()];
 
-        mOrder.setOnClickListener(new View.OnClickListener() {
+        botoProductes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ActivitatClient.this);
@@ -277,7 +297,7 @@ public class ActivitatClient extends AppCompatActivity {
                                 item = item + ", ";
                             }
                         }
-                        mItemSelected.setText(item);
+                        textProductes.setText(item);
                     }
                 });
 
@@ -295,7 +315,7 @@ public class ActivitatClient extends AppCompatActivity {
                                 item = item + ", ";
                             }
                         }
-                        mItemSelected.setText(item);
+                        textProductes.setText(item);
                     }
                 });
 
@@ -306,7 +326,7 @@ public class ActivitatClient extends AppCompatActivity {
                         mUserItems.clear();
                         for (int i = 0; i < checkedItems.length; i++) {
                             checkedItems[i] = false;
-                            mItemSelected.setText("Ningún producto seleccionado");
+                            textProductes.setText("Ningún producto seleccionado");
                         }
                     }
                 });

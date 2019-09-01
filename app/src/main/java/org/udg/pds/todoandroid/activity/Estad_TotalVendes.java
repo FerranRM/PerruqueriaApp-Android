@@ -47,14 +47,14 @@ public class Estad_TotalVendes extends AppCompatActivity {
                     Intent intent1 = new Intent(Estad_TotalVendes.this, ActivitatClient.class);
                     startActivity(intent1);
                     break;
-                case R.id.navegacio_calendari:
-                    Intent intent2 = new Intent(Estad_TotalVendes.this, CalendariDia.class);
+                case R.id.navegacio_reserves:
+                    Intent intent2 = new Intent(Estad_TotalVendes.this, Reserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(Estad_TotalVendes.this, Alertes.class);
+                case R.id.navegacio_calendari:
+                    Intent intent4 = new Intent(Estad_TotalVendes.this, Calendari.class);
                     startActivity(intent4);
                     break;
                 case R.id.navegacio_ajustos:

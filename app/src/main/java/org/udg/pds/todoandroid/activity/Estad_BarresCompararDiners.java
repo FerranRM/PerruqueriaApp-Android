@@ -55,14 +55,14 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
                     Intent intent1 = new Intent(Estad_BarresCompararDiners.this, ActivitatClient.class);
                     startActivity(intent1);
                     break;
-                case R.id.navegacio_calendari:
-                    Intent intent2 = new Intent(Estad_BarresCompararDiners.this, CalendariDia.class);
+                case R.id.navegacio_reserves:
+                    Intent intent2 = new Intent(Estad_BarresCompararDiners.this, Reserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
                     break;
-                case R.id.navegacio_alertes:
-                    Intent intent4 = new Intent(Estad_BarresCompararDiners.this, Alertes.class);
+                case R.id.navegacio_calendari:
+                    Intent intent4 = new Intent(Estad_BarresCompararDiners.this, Calendari.class);
                     startActivity(intent4);
                     break;
                 case R.id.navegacio_ajustos:
@@ -100,7 +100,7 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         Calendar data2 = GregorianCalendar.getInstance();
         Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
 
-        Call<List<Client>> call = mTodoService.listClientsDates(data1,data2.getTime());
+        Call<List<Client>> call = mTodoService.listAllClients(data1,data2.getTime());
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
@@ -125,31 +125,33 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
     //      Després crea el gràfic a partir d'aquesta llista de dades.
     public void tractarDades(Collection<Client> clients) {
         //HAY QUE ASEGURARSE QUE HAY DATOS DE LOS ULTIMOS 12 MESES EN LOS DOS!!!
+        //QUE PASA SI UN MES ESTA EN UN AÑO Y EN OTRO NO?
 
         List<DataEntry> dataPasado = new ArrayList<>();
         List<DataEntry> dataActual = new ArrayList<>();
         Integer total = 0;
-        int comptadorMesos = 0;
-        String mesPasado = null;
+        String mes = null;
+        String mesInicial = null;
+        Boolean nouAny = false;
         for(Client auxClient : clients){
-            if (comptadorMesos==0){
-                comptadorMesos++;
-                mesPasado = obtenirNomMes(auxClient.getDataClient());
+            if (mes==null){
+                mes = obtenirNomMes(auxClient.getDataClient());
+                mesInicial = mes;
                 total += auxClient.getPreuTotal();
             }
-            else if (!obtenirNomMes(auxClient.getDataClient()).equals(mesPasado)){    //Si el mes del client auxClient és diferent al de anterior
-                comptadorMesos++;
-                if (comptadorMesos<14)  //Fem estadístiques dels últims 13 mesos
-                    dataPasado.add(new ValueDataEntry(mesPasado, total));
+            else if (!obtenirNomMes(auxClient.getDataClient()).equals(mes)){    //Si el mes del client auxClient és diferent al de anterior
+                if (nouAny)  //Fem estadístiques dels últims 13 mesos
+                    dataActual.add(new ValueDataEntry(mes, total));
                 else
-                    dataActual.add(new ValueDataEntry(mesPasado, total));
-                mesPasado = obtenirNomMes(auxClient.getDataClient());
+                    dataPasado.add(new ValueDataEntry(mes, total));
+                mes = obtenirNomMes(auxClient.getDataClient());
                 total = auxClient.getPreuTotal();
+                if (mes.equals(mesInicial)) nouAny = true;
             }
             else total += auxClient.getPreuTotal();
         }
 
-        dataActual.add(new ValueDataEntry(mesPasado, total));   //Afegim el darrer mes calculat
+        dataActual.add(new ValueDataEntry(mes, total));   //Afegim el darrer mes calculat
 
         dibuixarGrafic(dataPasado,dataActual);
     }
