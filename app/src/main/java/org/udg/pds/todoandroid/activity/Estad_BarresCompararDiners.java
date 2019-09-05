@@ -99,9 +99,13 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
 
         Calendar data2 = GregorianCalendar.getInstance();
         Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
+        Date data2F = data2.getTime();
 
-        Call<List<Client>> call = mTodoService.listAllClients(data1,data2.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
+        String sData1 = format.format(data1);
+        String sData2 = format.format(data2F);
 
+        Call<List<Client>> call = mTodoService.listAllClients(sData1,sData2);
         call.enqueue(new Callback<List<Client>>() {
             @Override
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {

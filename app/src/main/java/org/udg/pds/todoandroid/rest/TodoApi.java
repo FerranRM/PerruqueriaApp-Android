@@ -54,17 +54,14 @@ public interface TodoApi {
   @POST("/clients")
   Call<IdObject> addClient(@Body Client client);
 
-  @GET("/clients")
-  Call<List<Client>> getClients();
-
   @GET("/clients/{id}")
   Call<Client> getClient(@Path("id") String id);
 
   @POST("/clients/{id}/productes")
   Call<ResponseBody> addProductes(@Body List<Long> productes, @Path("id") String id);
 
-  @GET("/clients?{data1}&?{data2}")
-  Call<List<Client>> listAllClients(@Query("data1") Date data1, @Query("data2") Date data2);
+  @GET("/clients")
+  Call<List<Client>> listAllClients(@Query("data1") String data1, @Query("data2") String data2);
 //POSTMAN: http://localhost:8080/clients?data1=2018-07-01T17:36:00&data2=2018-08-20T17:36:00
 
 

@@ -233,7 +233,6 @@ public class Reserva extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 
         String diaText = (String) DateFormat.format("EEEE",  data);
-        System.out.println("JAJJAJ");
         if (diaText.equals("lunes") || diaText.equals("Mon")) diaText = "Lunes";
         else if (diaText.equals("martes") || diaText.equals("Tue")) diaText = "Martes";
         else if (diaText.equals("miércoles") || diaText.equals("Wed")) diaText = "Miércoles";
