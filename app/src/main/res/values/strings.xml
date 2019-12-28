@@ -10,7 +10,7 @@
     <string name="task_text">Text:</string>
     <string name="hora_visita">Hora visita:</string>
     <string name="button_set">Escoger hora</string>
-    <string name="nombre_cliente">Time limit:</string>
+    <string name="nombre_cliente">Nombre cliente:</string>
     <string name="button_save">Save</string>
     <string name="text_favorites">Favorites</string>
     <string name="text_schedules">Schedules</string>

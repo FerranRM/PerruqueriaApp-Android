@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Estadistiques extends AppCompatActivity {
+public class Estadistiques extends AppCompatActivity implements SingleChoiceDialogFragment.SingleChoiceListener {
 
     TodoApi mTodoService;
 
@@ -36,7 +36,7 @@ public class Estadistiques extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Estadistiques.this, Reserva.class);
+                    Intent intent2 = new Intent(Estadistiques.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
@@ -65,11 +65,30 @@ public class Estadistiques extends AppCompatActivity {
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+    }
 
-        ImageButton bGuardar = findViewById(R.id.imgButtonGuardar);
 
+    //Canvi a pantalla llistat clients (Nom client i quant diner s'ha deixat). Abans de canviar surt un fragment per triar el mes que es vol consultar
+    public void llistatClientsFets(View v){
+        DialogFragment singleChoiceDialog = new SingleChoiceDialogFragment();
+        singleChoiceDialog.setCancelable(false);
+        singleChoiceDialog.show(getSupportFragmentManager(), "Single Choice Dialog");
+    }
+
+    @Override
+    public void onPositiveButtonClicked(int posicio) {
+        Intent intent = new Intent(Estadistiques.this, Llistat_ClientsFets.class);
+        intent.putExtra("MES_TRIAT",posicio);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
 
     }
+
+
+
 
     //Canvi a pantalla estadística total vendes
     public void estdTotalDiners(View v){

@@ -9,20 +9,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
+import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.rest.TodoApi;
+import org.udg.pds.todoandroid.entity.Reserva;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Calendari extends AppCompatActivity {
+
+    TodoApi mTodoService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_calendari);
+
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
 
         //Creació de la barra de navgeació dels 4 menús
@@ -35,7 +49,7 @@ public class Calendari extends AppCompatActivity {
         calendari.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Intent intentCanvi = new Intent(Calendari.this, Reserva.class);
+                Intent intentCanvi = new Intent(Calendari.this, ActivitatReserva.class);
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, dayOfMonth);
@@ -44,14 +58,13 @@ public class Calendari extends AppCompatActivity {
                 int[] dataAMostrar = new int[]{month, dayOfMonth, dayOfWeek, year};
                 intentCanvi.putExtra("dadesData",dataAMostrar);
                 startActivity(intentCanvi);
-
-                /*Fragment fCalendari = new clientsDia();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();*/
             }
         });
 
         TextView dataActual = findViewById(R.id.textData);
         dataActual.setText(dataActual());
+
+        totalReservesActuals();
     }
 
 
@@ -108,6 +121,43 @@ public class Calendari extends AppCompatActivity {
         else mesActual = "DICIEMBRE";
 
         return (diaActual+" de "+mesActual);
+    }
+
+
+    //Pre: --
+    //Post: mostra per pantalla el total de reserves que té el perruquer per al dia actual
+    public void totalReservesActuals() {
+
+        Calendar data2 = GregorianCalendar.getInstance();
+        Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR), data2.get(Calendar.MONTH), data2.get(Calendar.DAY_OF_MONTH)).getTime();
+        Date data2F = new GregorianCalendar(data2.get(Calendar.YEAR), data2.get(Calendar.MONTH), data2.get(Calendar.DAY_OF_MONTH)+1).getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
+        String sData1 = format.format(data1);
+        String sData2 = format.format(data2F);
+
+        Call<List<Reserva>> call = mTodoService.listAllReserves(sData1,sData2);
+        call.enqueue(new Callback<List<Reserva>>() {
+            @Override
+            public void onResponse(Call<List<Reserva>> call, Response<List<Reserva>> response) {
+                if (response.isSuccessful()) {
+
+                    TextView totalReserves = findViewById(R.id.totalReserves);
+                    totalReserves.setText("Total reservas para hoy: " + response.body().size());
+
+                } else {
+                    Toast toast = Toast.makeText(Calendari.this, "Error obteniendo listado de reservas", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Reserva>> call, Throwable t) {
+                Toast toast = Toast.makeText(Calendari.this, "Error 2 obteniendo listado de reservas", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
     }
 
 }

@@ -1,23 +1,35 @@
 package org.udg.pds.todoandroid.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.IdObject;
+import org.udg.pds.todoandroid.entity.Perruquer;
+import org.udg.pds.todoandroid.entity.Producte;
+import org.udg.pds.todoandroid.entity.ServeiPrestat;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +38,8 @@ import retrofit2.Response;
 public class Ajustos extends AppCompatActivity {
 
     TodoApi mTodoService;
+
+    public ArrayList<org.udg.pds.todoandroid.entity.Producte> llistaProductes;
 
     int[] imatges = {R.drawable.noi, R.drawable.noi1, R.drawable.noia, R.drawable.noia1, R.drawable.noia2, R.drawable.noia3};
 
@@ -42,7 +56,7 @@ public class Ajustos extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Ajustos.this, Reserva.class);
+                    Intent intent2 = new Intent(Ajustos.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
@@ -61,10 +75,14 @@ public class Ajustos extends AppCompatActivity {
     };
 
 
+    //Pre:
+    //Post:
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_ajustos);
+
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
 
         //Creació de la barra de navegació dels 5 menús
@@ -72,8 +90,40 @@ public class Ajustos extends AppCompatActivity {
         navView.setSelectedItemId(R.id.navegacio_ajustos);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
+        assginarNomPerruquer();
+
     }
 
+
+    //Pre: --
+    //Post: assignem el nom de l'usuari per mostrar-ho per pantalla
+    public void assginarNomPerruquer() {
+        TextView nomPerruquer = findViewById(R.id.nomPerruquer);
+
+        Call<Perruquer> call = mTodoService.getIdPerruquer();
+        call.enqueue(new Callback<Perruquer>() {
+            @Override
+            public void onResponse(Call<Perruquer> call, Response<Perruquer> response) {
+
+                if (response.isSuccessful()) {
+                    nomPerruquer.setText(response.body().getNomUsuari());
+                } else {
+                    Toast toast = Toast.makeText(Ajustos.this, "Error accediendo al ID de usuario "+response.raw(), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Perruquer> call, Throwable t) {
+                Toast toast = Toast.makeText(Ajustos.this, "Error accediendo al ID de usuario ", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+    //Pre:
+    //Post:
     public void modificarImatge(View view) {
         ImageView modImatge = findViewById(R.id.imatgePerfil);
         int n = new Random().nextInt(imatges.length-1);
@@ -84,7 +134,148 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
+    //Pre:
+    //Post:
+    public void afegirProducte(View view) {
 
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Ajustos.this);
+
+        LayoutInflater inflater = Ajustos.this.getLayoutInflater();
+        View infoClient = inflater.inflate(R.layout.dades_producte, null);
+
+        EditText preuProducte = infoClient.findViewById(R.id.afegir_producte_preu);
+        EditText descProducte = infoClient.findViewById(R.id.afegir_producte_nom);
+
+
+        mBuilder.setView(infoClient)
+                .setPositiveButton("AÑADIR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Producte nouProducte = new Producte(Integer.parseInt(preuProducte.getText().toString()), descProducte.getText().toString());
+
+                        Call<IdObject> call = mTodoService.addProducte(nouProducte);
+                        call.enqueue(new Callback<IdObject>() {
+                            @Override
+                            public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                                if (response.isSuccessful()) {
+                                    nouProducte.setId(response.body().id);
+
+                                    Toast toast = Toast.makeText(Ajustos.this, "Producto añadido!", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                } else {
+                                    Toast toast = Toast.makeText(Ajustos.this, "Error al añadir el producto", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<IdObject> call, Throwable t) {
+                                Toast toast = Toast.makeText(Ajustos.this, "Error 2 al añadir el producto", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        });
+                    }
+                })
+
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+    }
+
+
+
+    //Pre:
+    //Post:
+    public void eliminarProducte(View view) {
+        List<Producte> llistaProductes = new ArrayList<>();
+
+        Call<List<Producte>> call = mTodoService.getProductes();
+        call.enqueue(new Callback<List<Producte>>() {
+            @Override
+            public void onResponse(Call<List<Producte>> call, Response<List<Producte>> response) {
+                if (response.isSuccessful()) {
+                    for(Producte auxProducte : response.body()){
+                        llistaProductes.add(auxProducte);
+                    }
+                    llistarProductesEliminar(llistaProductes);
+                } else {
+                    Toast toast = Toast.makeText(Ajustos.this, "Error obteniendo listado de productos", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Producte>> call, Throwable t) {
+                Toast toast = Toast.makeText(Ajustos.this, "Error 2 obteniendo listado de productos", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+
+    //Pre:
+    //Post:
+    public void afegirServei(View view) {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Ajustos.this);
+
+        LayoutInflater inflater = Ajustos.this.getLayoutInflater();
+        View infoClient = inflater.inflate(R.layout.dades_producte, null);
+
+        EditText preuServei = infoClient.findViewById(R.id.afegir_producte_preu);
+        EditText descServei = infoClient.findViewById(R.id.afegir_producte_nom);
+
+
+        mBuilder.setView(infoClient)
+                .setPositiveButton("AÑADIR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        ServeiPrestat nouServei = new ServeiPrestat(Integer.parseInt(preuServei.getText().toString()), descServei.getText().toString());
+
+                        Call<IdObject> call = mTodoService.addServeiPrestat(nouServei);
+                        call.enqueue(new Callback<IdObject>() {
+                            @Override
+                            public void onResponse(Call<IdObject> call, Response<IdObject> response) {
+                                if (response.isSuccessful()) {
+                                    nouServei.setId(response.body().id);
+
+                                    Toast toast = Toast.makeText(Ajustos.this, "Servicio añadido!", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                } else {
+                                    Toast toast = Toast.makeText(Ajustos.this, "Error al añadir el servicio", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<IdObject> call, Throwable t) {
+                                Toast toast = Toast.makeText(Ajustos.this, "Error 2 al añadir el servicio", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        });
+                    }
+                })
+
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+    }
+
+
+    //Pre:
+    //Post:
     public void tancarSessioPerruquer(View view){
         TodoApi todoApi = ((TodoApp) this.getApplication()).getAPI();
         Call<String> call = todoApi.logout();
@@ -110,7 +301,8 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
-
+    //Pre:
+    //Post:
     public void modificarPerfilPerruquer(View view){
         /*Call<Response> call = mTodoService.logout();
         call.enqueue(new Callback<Response>() {
@@ -136,15 +328,208 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
+    //Pre:
+    //Post:
     public void instagramPerruqueria(View view) {
         Intent instagramIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/ferranfrm/?hl=es"));
         startActivity(instagramIntent);
     }
 
 
+    //Pre:
+    //Post: es mostra un llistat de tots els productes actuals. Cada producte es pot checkquejar/seleccionar per després eliminar-lo.
+    public void llistarProductesEliminar(List<Producte> llistaProductes) {
+        ArrayList<Integer> mUserItems = new ArrayList<>();
+        boolean[] checkedItems = new boolean[llistaProductes.size()];
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Ajustos.this);
+        mBuilder.setTitle("Que productos deseas eliminar?");
+
+        String[] arr = new String[llistaProductes.size()];
+        for(int i=0 ; i< llistaProductes.size();i++){
+            arr[i] = llistaProductes.get(i).getDescripcioProducte();
+        }
+
+
+        mBuilder.setMultiChoiceItems(arr, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                if(isChecked){
+                    mUserItems.add(position);
+                }else{
+                    mUserItems.remove((Integer.valueOf(position)));
+                }
+            }
+        });
+
+        mBuilder.setCancelable(false);
+
+
+        //Botó per eliminar tots els clickeables triats
+        mBuilder.setPositiveButton("Eliminar seleccionados", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                final Boolean[] eliminatOk = {true};
+                for (int i = 0; i < mUserItems.size(); i++) {
+
+                    int finalI = i;
+                    Call<ResponseBody> call = mTodoService.deleteProducte(llistaProductes.get(mUserItems.get(i)).getId().toString());
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                llistaProductes.remove(finalI);
+                            } else {
+                                eliminatOk[0] = false;
+                                Toast toast = Toast.makeText(Ajustos.this, "Error al eliminar el producto", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            eliminatOk[0] =false;
+                            Toast toast = Toast.makeText(Ajustos.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
+
+
+                }
+
+                if (eliminatOk[0]) {
+                    Toast toast = Toast.makeText(Ajustos.this, "Productos eliminados correctamente!", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+            }
+        });
+
+        //Tornem a la pantalla d'ajustos sense eliminar cap producte
+        mBuilder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                mUserItems.clear();
+                for (int i = 0; i < checkedItems.length; i++) {
+                    checkedItems[i] = false;
+                }
+            }
+        });
+
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+
+    }
+
+
+    public void eliminarServei(View view) {
+        List<ServeiPrestat> llistaServeis = new ArrayList<>();
+
+        Call<List<ServeiPrestat>> call = mTodoService.getServeisPrestats();
+        call.enqueue(new Callback<List<ServeiPrestat>>() {
+            @Override
+            public void onResponse(Call<List<ServeiPrestat>> call, Response<List<ServeiPrestat>> response) {
+                if (response.isSuccessful()) {
+                    for(ServeiPrestat auxServei : response.body()){
+                        llistaServeis.add(auxServei);
+                    }
+                    llistarServeisEliminar(llistaServeis);
+                } else {
+                    Toast toast = Toast.makeText(Ajustos.this, "Error obteniendo listado de servicios prestados", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ServeiPrestat>> call, Throwable t) {
+                Toast toast = Toast.makeText(Ajustos.this, "Error 2 obteniendo listado de servicios prestados", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+    //Pre:
+    //Post: es mostra un llistat de tots els serveis a prestar actuals. Cada servei es pot checkquejar/seleccionar per després eliminar-lo.
+    public void llistarServeisEliminar(List<ServeiPrestat> llistaServeis) {
+        ArrayList<Integer> mUserItems = new ArrayList<>();
+        boolean[] checkedItems = new boolean[llistaServeis.size()];
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Ajustos.this);
+        mBuilder.setTitle("Que servicios deseas eliminar?");
+
+        String[] arr = new String[llistaServeis.size()];
+        for(int i=0 ; i< llistaServeis.size();i++){
+            arr[i] = llistaServeis.get(i).getDescripcioServei();
+        }
+
+
+        mBuilder.setMultiChoiceItems(arr, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                if(isChecked){
+                    mUserItems.add(position);
+                }else{
+                    mUserItems.remove((Integer.valueOf(position)));
+                }
+            }
+        });
+
+        mBuilder.setCancelable(false);
+
+
+        //Botó per eliminar tots els clickeables triats
+        mBuilder.setPositiveButton("Eliminar seleccionados", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                final Boolean[] eliminatOk = {true};
+                for (int i = 0; i < mUserItems.size(); i++) {
+
+                    int finalI = i;
+                    Call<ResponseBody> call = mTodoService.deleteServeiPrestat(llistaServeis.get(mUserItems.get(i)).getId().toString());
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                llistaServeis.remove(finalI);
+                            } else {
+                                eliminatOk[0] = false;
+                                Toast toast = Toast.makeText(Ajustos.this, "Error al eliminar el servicio prestado", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            eliminatOk[0] =false;
+                            Toast toast = Toast.makeText(Ajustos.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
+
+
+                }
+
+                if (eliminatOk[0]) {
+                    Toast toast = Toast.makeText(Ajustos.this, "Servicio prestados eliminados correctamente!", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+            }
+        });
+
+        //Tornem a la pantalla d'ajustos sense eliminar cap servei prestat
+        mBuilder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                mUserItems.clear();
+                for (int i = 0; i < checkedItems.length; i++) {
+                    checkedItems[i] = false;
+                }
+            }
+        });
+
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
+
+    }
 }
-
-
-
-
-

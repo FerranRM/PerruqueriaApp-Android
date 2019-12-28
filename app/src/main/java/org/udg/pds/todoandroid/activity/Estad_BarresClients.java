@@ -59,10 +59,12 @@ public class Estad_BarresClients extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Estad_BarresClients.this, Reserva.class);
+                    Intent intent2 = new Intent(Estad_BarresClients.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
+                    Intent intent3 = new Intent(Estad_BarresClients.this, Estadistiques.class);
+                    startActivity(intent3);
                     break;
                 case R.id.navegacio_calendari:
                     Intent intent4 = new Intent(Estad_BarresClients.this, Calendari.class);
@@ -89,7 +91,7 @@ public class Estad_BarresClients extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("TOTAL CLIENTES ÚLTIMO AÑO");
+        titol.setText("Total clientes último año");
 
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
@@ -172,7 +174,7 @@ public class Estad_BarresClients extends AppCompatActivity {
                 .format("{%Value}{groupsSeparator: }");
 
         cartesian.animation(true);
-        cartesian.title("TOTAL CLIENTES MENSUALES");
+        cartesian.title("Total clientes mensuales");
 
         cartesian.yScale().minimum(0d);
         cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
@@ -182,8 +184,12 @@ public class Estad_BarresClients extends AppCompatActivity {
 
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
+        cartesian.credits().text("David Tellez");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.background().fill("#FFFFFF");
 
         anyChartView.setChart(cartesian);
+        anyChartView.setLicenceKey("ferryjack2@gmail.com-49753d4b-a9936015");
     }
 
 

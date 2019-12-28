@@ -20,7 +20,7 @@ import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.Client;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.Producte;
-import org.udg.pds.todoandroid.entity.TallCabells;
+import org.udg.pds.todoandroid.entity.ServeiPrestat;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
 import java.util.ArrayList;
@@ -36,14 +36,24 @@ public class ActivitatClient extends AppCompatActivity {
 
     TodoApi mTodoService;
 
-    private Button botoCabells;
+    private Button botoServeis;
     private Button botoProductes;
-    private TextView textTallCabells;
+
+    private TextView textServeisPrestats;
     private TextView textProductes;
-    private List<TallCabells> llistaTalls = new ArrayList<>();
+
+    private TextView tvPreuTotal;
+    private Integer preuTotal;
+
+    private List<ServeiPrestat> llistaServeis = new ArrayList<>();
     private List<Producte> llistaProductes = new ArrayList<>();
-    private boolean[] checkedItems;
-    private ArrayList<Integer> mUserItems = new ArrayList<>();
+
+    private boolean[] checkedServeis;
+    private boolean[] checkedProductes;
+
+
+    private ArrayList<Integer> mUserServeis = new ArrayList<>();
+    private ArrayList<Integer> mUserProductes = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,7 +64,7 @@ public class ActivitatClient extends AppCompatActivity {
                 case R.id.navegacio_afegirClient:
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(ActivitatClient.this, Reserva.class);
+                    Intent intent2 = new Intent(ActivitatClient.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
@@ -87,6 +97,9 @@ public class ActivitatClient extends AppCompatActivity {
         navView.setSelectedItemId(R.id.navegacio_afegirClient);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        tvPreuTotal = findViewById(R.id.textTotal);
+        preuTotal = 0;
+
         llistatTallCabells();   //Métode encarregat de llistar els tipus de tall de cabells que pot fer-se el client
         llistatProductes();     //Métode encarregat de llistar els productes que pot comprar el client
     }
@@ -94,18 +107,16 @@ public class ActivitatClient extends AppCompatActivity {
 
     //Pre: --
     //Post: crea un String amb els valors entrats a l'hora d'afegir un client.
-    //      Cada valor del client (Sexe, tipus de pentinat, preu total, nom, data i productes) està separat per un "/" .
+    //      Cada valor del client (Sexe, tipus de pentinat, nom, data i productes) està separat per un "/" .
+    //      El preu total és l'únic que ja s'ha calculat prèviament.
     //      En cas de que hi hagui alguna dada malament es mostra una alerta per pantalla amb el valor erroni.
     //      Altrament es guarda el client a la BD mitjaçant el mètode guardarClientBD.
     public void guardarClient(View view) {
         String clientFet = comprovarSexe();
         if (clientFet=="!") mostrarAlerta("Tipo de sexo no seleccionado");
         else {
-            Integer auxPreu = null;
+
             String aux = comprovarTall();
-            if (aux.equals("1/")) auxPreu = 7;
-            else if (aux.equals("2/")) auxPreu = 15;
-            else auxPreu = 30;
 
             if (aux == "!") mostrarAlerta("Tipo de corte no seleccionado");
             else{
@@ -116,12 +127,8 @@ public class ActivitatClient extends AppCompatActivity {
                 if (aux.isEmpty()) mostrarAlerta("Nombre cliente no introducido");
                 else {
                     clientFet += aux + "/";
-                    auxPreu += productesPreu();
                     aux = productes();
-                    clientFet += aux+"/"+auxPreu.toString();
-
-                    TextView preuTotal = findViewById(R.id.textTotal);
-                    preuTotal.setText("Total: " +auxPreu+ "€");      //Mostrem per pantalla el preu total final
+                    clientFet += aux+"/"+preuTotal.toString();
 
                     guardarClientBD(clientFet);
                 }
@@ -151,22 +158,11 @@ public class ActivitatClient extends AppCompatActivity {
     //      En cas de que no hi hagui cap seleccionat retorna un string buit: "".
     public String productes(){
         String llistatProd="";
-        for (int i = 0; i<mUserItems.size(); i++){
-            llistatProd = llistatProd + llistaProductes.get(mUserItems.get(i)).getDescripcioProducte();
-            if (i< mUserItems.size()-1) llistatProd += ",";
+        for (int i = 0; i<mUserProductes.size(); i++){
+            llistatProd = llistatProd + llistaProductes.get(mUserProductes.get(i)).getDescripcioProducte();
+            if (i< mUserProductes.size()-1) llistatProd += ",";
         }
         return llistatProd;
-    }
-
-    //Pre: --
-    //Post: retorna un string de llista de tots els productes que estàn seleccionats separats per una coma entre ells.
-    //      En cas de que no hi hagui cap seleccionat retorna un string buit: "".
-    public Integer productesPreu(){
-        Integer preuTotal = 0;
-        for (int i = 0; i<mUserItems.size(); i++){
-            preuTotal = preuTotal + llistaProductes.get(mUserItems.get(i)).getPreuProducte();
-        }
-        return preuTotal;
     }
 
     //Pre: nomAlerta ha de ser un missatge d'alerta identificatiu de l'error.
@@ -189,8 +185,8 @@ public class ActivitatClient extends AppCompatActivity {
     //Pre: --
     //Post: s'encarrega del llistat de tipus de tall de cabells que pot fer-se el client
     public void llistatTallCabells() {
-        botoCabells = findViewById(R.id.ButtonTallCabells);
-        textTallCabells = (TextView) findViewById(R.id.tvTallCabells);
+        botoServeis = findViewById(R.id.ButtonServeisPrestats);
+        textServeisPrestats = (TextView) findViewById(R.id.tvServeisPrestats);
 
         obtenirDadesTallCabells();
     }
@@ -205,15 +201,15 @@ public class ActivitatClient extends AppCompatActivity {
     }
 
     public void obtenirDadesTallCabells() {
-        Call<List<TallCabells>> call = mTodoService.getTallsCabells();
-        call.enqueue(new Callback<List<TallCabells>>() {
+        Call<List<ServeiPrestat>> call = mTodoService.getServeisPrestats();
+        call.enqueue(new Callback<List<ServeiPrestat>>() {
             @Override
-            public void onResponse(Call<List<TallCabells>> call, Response<List<TallCabells>> response) {
+            public void onResponse(Call<List<ServeiPrestat>> call, Response<List<ServeiPrestat>> response) {
                 if (response.isSuccessful()) {
-                    for(TallCabells auxTallCabells : response.body()){
-                        llistaTalls.add(auxTallCabells);
+                    for(ServeiPrestat auxTallCabells : response.body()){
+                        llistaServeis.add(auxTallCabells);
                     }
-                    botoTallCabells();
+                    botoServeisPrestats();
                 } else {
                     Toast toast = Toast.makeText(ActivitatClient.this, "Error obteniendo listado de productos", Toast.LENGTH_SHORT);
                     toast.show();
@@ -221,15 +217,84 @@ public class ActivitatClient extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<TallCabells>> call, Throwable t) {
+            public void onFailure(Call<List<ServeiPrestat>> call, Throwable t) {
                 Toast toast = Toast.makeText(ActivitatClient.this, "Error 2 obteniendo listado de productos", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
     }
 
-    public void botoTallCabells() {
-        //TIENE QUE HACERSE
+
+    public void botoServeisPrestats() {
+        checkedServeis = new boolean[llistaServeis.size()];
+
+        botoServeis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ActivitatClient.this);
+                mBuilder.setTitle("Servicios prestados al cliente");
+
+                String[] arr = new String[llistaServeis.size()];
+                for(int i=0 ; i< llistaServeis.size();i++){
+                    arr[i] = llistaServeis.get(i).getDescripcioServei();
+                }
+
+
+                mBuilder.setMultiChoiceItems(arr, checkedServeis, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                        if(isChecked){
+                            mUserServeis.add(position);
+
+                            preuTotal += llistaServeis.get(position).getPreuServei();
+                            tvPreuTotal.setText("Total: " +preuTotal+ "€");      //Mostrem per pantalla el preu total final
+                        }else{
+                            mUserServeis.remove((Integer.valueOf(position)));
+
+                            preuTotal -= llistaServeis.get(position).getPreuServei();
+                            tvPreuTotal.setText("Total: " +preuTotal+ "€");      //Mostrem per pantalla el preu total final
+                        }
+                    }
+                });
+
+                mBuilder.setCancelable(false);
+
+                //Botó acceptar amb els clickeables triats
+                mBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        String item = "";
+                        for (int i = 0; i < mUserServeis.size(); i++) {
+                            item = item + llistaServeis.get(mUserServeis.get(i)).getDescripcioServei();
+                            if (i != mUserServeis.size() - 1) {
+                                item = item + ", ";
+                            }
+                        }
+                        textServeisPrestats.setText(item);
+                    }
+                });
+
+                //Botó borrar tots els serveis seleccionats
+                mBuilder.setNeutralButton("Borrar todo", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        mUserServeis.clear();
+                        for (int i = 0; i < checkedServeis.length; i++) {
+                            if (checkedServeis[i])
+                                preuTotal -= llistaServeis.get(i).getPreuServei();
+
+                            checkedServeis[i] = false;
+                            textServeisPrestats.setText("Ningún servicio seleccionado");
+                        }
+
+                        tvPreuTotal.setText("Total: " +preuTotal+ "€");      //Mostrem per pantalla el preu total final
+                    }
+                });
+
+                AlertDialog mDialog = mBuilder.create();
+                mDialog.show();
+            }
+        });
     }
 
 
@@ -259,7 +324,7 @@ public class ActivitatClient extends AppCompatActivity {
 
 
     public void butonsBLA() {
-        checkedItems = new boolean[llistaProductes.size()];
+        checkedProductes = new boolean[llistaProductes.size()];
 
         botoProductes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,13 +338,19 @@ public class ActivitatClient extends AppCompatActivity {
                 }
 
 
-                mBuilder.setMultiChoiceItems(arr, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                mBuilder.setMultiChoiceItems(arr, checkedProductes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
                         if(isChecked){
-                            mUserItems.add(position);
+                            mUserProductes.add(position);
+
+                            preuTotal += llistaProductes.get(position).getPreuProducte();
+                            tvPreuTotal.setText("Total: " +preuTotal+ "€");      //Mostrem per pantalla el preu total final
                         }else{
-                            mUserItems.remove((Integer.valueOf(position)));
+                            mUserProductes.remove((Integer.valueOf(position)));
+
+                            preuTotal -= llistaProductes.get(position).getPreuProducte();
+                            tvPreuTotal.setText("Total: " +preuTotal+ "€");      //Mostrem per pantalla el preu total final
                         }
                     }
                 });
@@ -291,27 +362,9 @@ public class ActivitatClient extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         String item = "";
-                        for (int i = 0; i < mUserItems.size(); i++) {
-                            item = item + llistaProductes.get(mUserItems.get(i)).getDescripcioProducte();
-                            if (i != mUserItems.size() - 1) {
-                                item = item + ", ";
-                            }
-                        }
-                        textProductes.setText(item);
-                    }
-                });
-
-                //Botó seleccionar tots els productes directament
-                mBuilder.setNegativeButton("Seleccionar todo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        String item = "";
-                        mUserItems.clear();
-                        for (int i = 0; i < llistaProductes.size(); i++) {
-                            checkedItems[i] = true;
-                            mUserItems.add(i);
-                            item = item + llistaProductes.get(i).getDescripcioProducte();
-                            if (i != llistaProductes.size() - 1) {
+                        for (int i = 0; i < mUserProductes.size(); i++) {
+                            item = item + llistaProductes.get(mUserProductes.get(i)).getDescripcioProducte();
+                            if (i != mUserProductes.size() - 1) {
                                 item = item + ", ";
                             }
                         }
@@ -323,11 +376,16 @@ public class ActivitatClient extends AppCompatActivity {
                 mBuilder.setNeutralButton("Borrar todo", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        mUserItems.clear();
-                        for (int i = 0; i < checkedItems.length; i++) {
-                            checkedItems[i] = false;
+                        mUserProductes.clear();
+                        for (int i = 0; i < checkedProductes.length; i++) {
+                            if (checkedProductes[i])
+                                preuTotal -= llistaProductes.get(i).getPreuProducte();
+
+                            checkedProductes[i] = false;
                             textProductes.setText("Ningún producto seleccionado");
                         }
+
+                        tvPreuTotal.setText("Total: " +preuTotal+ "€");      //Mostrem per pantalla el preu total final
                     }
                 });
 
@@ -349,7 +407,7 @@ public class ActivitatClient extends AppCompatActivity {
         c1.sexeClient = Boolean.valueOf(cadenaVariables[0]);
         c1.pentinatClient = Integer.valueOf(cadenaVariables[1]);
         c1.nomClient = cadenaVariables[2];
-        c1.preuTotal = Integer.valueOf(cadenaVariables[4]);
+        c1.preuTotal = preuTotal;
         c1.dataClient = new Date();
 
 
@@ -378,8 +436,8 @@ public class ActivitatClient extends AppCompatActivity {
     //Post: s'afegeixen els productes seleccionats prèviament, si és que n'hi ha, a la BD amb el client actual.
     public void guardarProductes(Long id) {
         List<Long> llistaIds = new ArrayList<>();
-        for(int i=0; i<checkedItems.length; i++){   //Obtenim la llista dels id dels productes seleccionats
-            if (checkedItems[i]) {
+        for(int i=0; i<checkedProductes.length; i++){   //Obtenim la llista dels id dels productes seleccionats
+            if (checkedProductes[i]) {
                 Long aux = Long.valueOf(llistaProductes.get(i).getId());
                 llistaIds.add(aux);
             }

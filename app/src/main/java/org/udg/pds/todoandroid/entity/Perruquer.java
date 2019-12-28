@@ -12,4 +12,8 @@ public class Perruquer {
     return nomPerruquer;
   }
 
+  public String getNomUsuari() {
+    return nomUsuari;
+  }
+
 }

@@ -8,7 +8,7 @@ import java.util.TimeZone;
  * To change this template use File | Settings | File Templates.
  */
 
-// Global variables (yes, I'm evil)
+// Global variables
 public class Global {
     public static final String tz = TimeZone.getDefault().getDisplayName();
     public static final SimpleDateFormat DATE_ONLY_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
@@ -28,6 +28,7 @@ public class Global {
     // public static final String BASE_URL_PORTFORWARDING = "http://10.0.3.2:8080";
     // For debugging with real device using port forwarding
     // https://developer.chrome.com/devtools/docs/remote-debugging?hl=de#port-forwarding
+    //public static final String BASE_URL_PORTFORWARDING = "https://david-servidor.herokuapp.com";
     public static final String BASE_URL_PORTFORWARDING = "http://localhost:8080";
     public static final String BASE_URL_GENYMOTION = "http://10.0.3.2:8080";
 

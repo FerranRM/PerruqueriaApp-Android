@@ -48,10 +48,12 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Estad_PastisTotalDiners.this, Reserva.class);
+                    Intent intent2 = new Intent(Estad_PastisTotalDiners.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
+                    Intent intent3 = new Intent(Estad_PastisTotalDiners.this, Estadistiques.class);
+                    startActivity(intent3);
                     break;
                 case R.id.navegacio_calendari:
                     Intent intent4 = new Intent(Estad_PastisTotalDiners.this, Calendari.class);
@@ -78,7 +80,7 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("TOTAL PRODUCTOS VENDIDOS");
+        titol.setText("Total productos vendidos");
 
         ferGrafic();
     }
@@ -163,9 +165,12 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
 
-        pie.credits("D.Tellez Barber");
+        pie.credits().text("David Tellez");
+        pie.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        pie.background().fill("#FFFFFF");
 
         anyChartView.setChart(pie);
+        anyChartView.setLicenceKey("ferryjack2@gmail.com-49753d4b-a9936015");
     }
 }
 

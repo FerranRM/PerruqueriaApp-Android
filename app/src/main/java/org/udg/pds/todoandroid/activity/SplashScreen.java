@@ -46,6 +46,9 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                /*SplashScreen.this.startActivity(new Intent(SplashScreen.this, Login.class));
+                SplashScreen.this.finish();*/
+
                 Toast toast = Toast.makeText(SplashScreen.this, "Error checking login status", Toast.LENGTH_SHORT);
                 toast.show();
             }

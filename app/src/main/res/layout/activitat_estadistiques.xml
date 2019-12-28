@@ -36,35 +36,36 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/botoEstdTotalDiners"
-        android:layout_width="800px"
+        android:id="@+id/botoEstdTotalClients"
+        android:layout_width="700px"
         android:layout_height="180px"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="false"
+        android:layout_marginLeft="80dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/boto_efecte_blanc"
-        android:text="Número total de ventas en\nproductos en el último año"
+        android:onClick="llistatClientsFets"
+        android:text="Listado clientes echos"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:onClick="estdTotalVendes" />
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/botoEstdTotalClients"
-        android:layout_width="600px"
+        android:id="@+id/botoEstdTotalDiners"
+        android:layout_width="700px"
         android:layout_height="180px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="185dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="190dp"
         android:background="@drawable/boto_efecte_blanc"
+        android:onClick="estdTotalDiners"
         android:text="Total ganancias en\nel último año"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:onClick="estdTotalDiners"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/botoEstdTotalSexes"
         android:layout_width="700px"
         android:layout_height="180px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="280dp"
         android:background="@drawable/boto_efecte_blanc"
         android:text="Número total de clientes\nen el último año"
         android:textColor="#FFFFFF"
@@ -73,39 +74,99 @@
 
     <Button
         android:id="@+id/botoEstdCompDiners"
-        android:layout_width="680px"
-        android:layout_height="200px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"
+        android:layout_width="700px"
+        android:layout_height="180px"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="370dp"
         android:background="@drawable/boto_efecte_blanc"
+        android:onClick="estdCompararSexes"
         android:text="Comparar número\n total de clientes en\nel último año por sexo"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:onClick="estdCompararSexes"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/botoEstdCompDinersMitjana"
-        android:layout_width="680px"
+        android:layout_width="700px"
         android:layout_height="180px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="440dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="460dp"
         android:background="@drawable/boto_efecte_blanc"
+        android:onClick="estdCompararDiners"
         android:text="Comparar ganancias\naño pasado y actual"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:onClick="estdCompararDiners"/>
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/botoDonutDiners"
-        android:layout_width="850px"
-        android:layout_height="180px"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="550dp"
+        android:id="@+id/botoTotalPerruquers"
+        android:layout_width="700px"
+        android:layout_height="160px"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="590dp"
         android:background="@drawable/boto_efecte_vermell"
+        android:onClick="estdPastisTotalDiners"
         android:text="Total dinero echo\npor cada peluquero"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:onClick="estdPastisTotalDiners"/>
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/fotoLlistatClients"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_alignTop="@id/botoEstdTotalClients"
+        android:layout_alignBottom="@id/botoEstdTotalClients"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/llistat_clients_fets" />
+
+    <ImageView
+        android:id="@+id/fotoGuanys"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_alignTop="@id/botoEstdTotalDiners"
+        android:layout_alignBottom="@id/botoEstdTotalDiners"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/total_guanys" />
+
+    <ImageView
+        android:id="@+id/fotoTotalClients"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_alignTop="@id/botoEstdTotalSexes"
+        android:layout_alignBottom="@id/botoEstdTotalSexes"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/totalclients" />
+
+    <ImageView
+        android:id="@+id/fotoClientsNumSexe"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_alignTop="@id/botoEstdCompDiners"
+        android:layout_alignBottom="@id/botoEstdCompDiners"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/clients_sexe" />
+
+    <ImageView
+        android:id="@+id/fotoCompararGuanys"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_alignTop="@id/botoEstdCompDinersMitjana"
+        android:layout_alignBottom="@id/botoEstdCompDinersMitjana"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/comparar_anys" />
+
+    <ImageView
+        android:id="@+id/fotoTotalPerrruquers"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_alignTop="@id/botoTotalPerruquers"
+        android:layout_alignBottom="@id/botoTotalPerruquers"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@drawable/diners_perruquers" />
 
 
 </RelativeLayout>

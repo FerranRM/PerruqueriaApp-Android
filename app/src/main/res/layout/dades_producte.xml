@@ -19,22 +19,20 @@
             android:id="@+id/titol_preu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hora_visita"
             android:layout_gravity="left|center_vertical"
-            android:layout_margin="3dp"/>
-
-
-        <Button
-            android:id="@+id/afegir_client_hora_button"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
             android:layout_margin="3dp"
-            android:background="#3F51B5"
-            android:fontFamily="@font/technasansregular"
-            android:onClick="onClickHoraClient"
-            android:text="@string/button_set"
-            android:textColor="#FFFFFF" />
+            android:text="Precio: " />
+
+        <EditText
+            android:id="@+id/afegir_producte_preu"
+            android:textIsSelectable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:layout_margin="3dp"
+            android:background="#D9DFF8"
+            android:inputType="number"
+            android:gravity="center|center_vertical"/>
 
     </LinearLayout>
     <LinearLayout
@@ -49,11 +47,11 @@
             android:id="@+id/at_tv2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nombre_cliente"
+            android:text="Descripción: "
             android:layout_gravity="left|center_vertical"
             android:layout_margin="3dp"/>
         <EditText
-            android:id="@+id/afegir_client_nom"
+            android:id="@+id/afegir_producte_nom"
             android:textIsSelectable="true"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

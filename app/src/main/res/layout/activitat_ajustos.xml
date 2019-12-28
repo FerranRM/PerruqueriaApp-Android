@@ -38,40 +38,81 @@
 
     <ImageView
         android:id="@+id/imatgePerfil"
-        android:layout_width="490px"
-        android:layout_height="510px"
+        android:layout_width="475px"
+        android:layout_height="500px"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="95dp"
         android:src="@drawable/noi1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nomPerruquer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="295dp"
+        android:layout_marginTop="290dp"
         android:textColor="#FFFFFF"
         android:text="Nom del perruquer" />
 
     <Button
-        android:id="@+id/modificarImatge"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/afegir_producte"
+        android:layout_width="155dp"
+        android:layout_height="70dp"
         android:layout_marginTop="330dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/boto_efecte_blanc"
-        android:text="Modificar imagen"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/boto_efecte_verd"
+        android:text="Añadir producto"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:onClick="modificarImatge"/>
+        android:onClick="afegirProducte"/>
+
+    <Button
+        android:id="@+id/eliminar_producte"
+        android:layout_width="155dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="330dp"
+        android:layout_marginRight="40dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/boto_efecte_vermell"
+        android:text="Eliminar producto"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="eliminarProducte"/>
+
+    <Button
+        android:id="@+id/afegir_servei"
+        android:layout_width="155dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/boto_efecte_verd"
+        android:text="Añadir\nservicio"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="afegirServei"/>
+
+    <Button
+        android:id="@+id/eliminar_servei"
+        android:layout_width="155dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginRight="40dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/boto_efecte_vermell"
+        android:text="Eliminar servicio"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:onClick="eliminarServei"/>
 
     <Button
         android:id="@+id/modificarNom"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="420dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="520dp"
+        android:layout_marginLeft="25dp"
         android:background="@drawable/boto_efecte_blanc"
         android:text="Modificar nombre"
         android:textColor="#FFFFFF"
@@ -81,10 +122,11 @@
 
     <Button
         android:id="@+id/sortirCompte"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="510dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="520dp"
+        android:layout_marginRight="25dp"
+        android:layout_alignParentRight="true"
         android:background="@drawable/boto_efecte_vermell"
         android:text="Salir de la cuenta"
         android:textColor="#FFFFFF"

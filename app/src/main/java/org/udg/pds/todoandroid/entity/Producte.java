@@ -6,6 +6,8 @@ public class Producte {
     public Integer preuProducte;
     public String descripcioProducte;
 
+    public Producte(){ }
+
     public Producte(Integer preuP, String descrP){
         this.preuProducte = preuP;
         this.descripcioProducte = descrP;
@@ -13,6 +15,10 @@ public class Producte {
 
     public Long getId(){
         return id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
     }
 
     public Integer getPreuProducte(){

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8BB6F5"
-    tools:context=".activity.Reserva">
+    tools:context=".activity.ActivitatReserva">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"

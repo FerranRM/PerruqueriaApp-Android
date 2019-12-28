@@ -56,10 +56,12 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Estad_BarresCompararDiners.this, Reserva.class);
+                    Intent intent2 = new Intent(Estad_BarresCompararDiners.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
+                    Intent intent3 = new Intent(Estad_BarresCompararDiners.this, Estadistiques.class);
+                    startActivity(intent3);
                     break;
                 case R.id.navegacio_calendari:
                     Intent intent4 = new Intent(Estad_BarresCompararDiners.this, Calendari.class);
@@ -86,7 +88,7 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("COMPARAR TOTAL DINERO AÑO PASADO Y ACTUAL");
+        titol.setText("Comparar total dinero\naño pasado y actual");
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
     }
@@ -199,8 +201,12 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
 
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
+        cartesian.credits().text("David Tellez");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.background().fill("#FFFFFF");
 
         anyChartView.setChart(cartesian);
+        anyChartView.setLicenceKey("ferryjack2@gmail.com-49753d4b-a9936015");
     }
 
     public String obtenirNomMes(Date data) {

@@ -16,6 +16,7 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
 import com.anychart.core.cartesian.series.Column;
+import com.anychart.core.ui.Background;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
@@ -44,7 +45,7 @@ public class Estad_BarresDiners extends AppCompatActivity {
 
     TodoApi mTodoService;
 
-    public ArrayList<Client> llistaClients2;
+    public ArrayList<Client> llistaClients;
 
 
 
@@ -59,10 +60,12 @@ public class Estad_BarresDiners extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Estad_BarresDiners.this, Reserva.class);
+                    Intent intent2 = new Intent(Estad_BarresDiners.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:
+                    Intent intent3 = new Intent(Estad_BarresDiners.this, Estadistiques.class);
+                    startActivity(intent3);
                     break;
                 case R.id.navegacio_calendari:
                     Intent intent4 = new Intent(Estad_BarresDiners.this, Calendari.class);
@@ -89,16 +92,17 @@ public class Estad_BarresDiners extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("TOTAL DINERO ÚLTIMO AÑO");
+        titol.setText("Total dinero último año");
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
     }
 
 
-    //Pre: Les dues dates d'entrada són correctes
-    //Post: fa la crida als clients que es troben entre les dues dates entrades per paràmetre i mostra els gràfics a partir d'aquests
+    //Pre: --
+    //Post: fa la crida als clients que es troben entre la data d'avui i la de fa un any (des del dia 01) i mostra el gràfic dels
+    //      diners fets cada mes a partir de les dades d'aquest període
     public void ferGrafic(){
-        llistaClients2 = new ArrayList<>();
+        llistaClients = new ArrayList<>();
 
         Calendar data2 = GregorianCalendar.getInstance();
         Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
@@ -171,7 +175,7 @@ public class Estad_BarresDiners extends AppCompatActivity {
                 .format("€{%Value}{groupsSeparator: }");
 
         cartesian.animation(true);
-        cartesian.title("TOTAL DINERO MENSUAL");
+        cartesian.title("Total dinero mensual");
 
         cartesian.yScale().minimum(0d);
         cartesian.yAxis(0).labels().format("€{%Value}{groupsSeparator: }");
@@ -181,8 +185,16 @@ public class Estad_BarresDiners extends AppCompatActivity {
 
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
+        cartesian.credits().text("David Tellez");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.background().fill("#FFFFFF");
+        /*cartesian.background().fill({
+            keys: ["#FFF","#66F", "#FFF"],
+            angle: 90,
+        });*/
 
         anyChartView.setChart(cartesian);
+        anyChartView.setLicenceKey("ferryjack2@gmail.com-49753d4b-a9936015");
     }
 
 

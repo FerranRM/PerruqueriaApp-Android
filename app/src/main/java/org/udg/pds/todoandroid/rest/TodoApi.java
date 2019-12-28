@@ -4,15 +4,13 @@ import org.udg.pds.todoandroid.entity.Client;
 import org.udg.pds.todoandroid.entity.IdObject;
 import org.udg.pds.todoandroid.entity.Producte;
 import org.udg.pds.todoandroid.entity.Reserva;
-import org.udg.pds.todoandroid.entity.TallCabells;
+import org.udg.pds.todoandroid.entity.ServeiPrestat;
 import org.udg.pds.todoandroid.entity.Task;
 import org.udg.pds.todoandroid.entity.Perruquer;
 import org.udg.pds.todoandroid.entity.UserLogin;
 
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -20,7 +18,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -36,6 +33,7 @@ public interface TodoApi {
 
   @GET("/perruquers/me")
   Call<Perruquer> getIdPerruquer();
+
 
 
 
@@ -66,11 +64,15 @@ public interface TodoApi {
 
 
 
+
   @POST("/reserves")
   Call<IdObject> addReseva(@Body Reserva reserva);
 
+  /*@GET("/reserves")
+  Call<List<ActivitatReserva>> listAllReserves();*/
+
   @GET("/reserves")
-  Call<List<Reserva>> getReserves();
+  Call<List<Reserva>> listAllReserves(@Query("data1") String data1, @Query("data2") String data2);
 
   @GET("/reserves/{id}")
   Call<Reserva> getReserva(@Path("id") String id);
@@ -81,25 +83,32 @@ public interface TodoApi {
 
 
 
-  /*@POST("/productes")
-  Call<IdObject> addProducte(@Body Producte producte);*/
+  @POST("/productes")
+  Call<IdObject> addProducte(@Body Producte producte);
 
   @GET("/productes")
   Call<List<Producte>> getProductes();
 
-  @GET("/reserves/{id}")
+  @GET("/productes/{id}")
   Call<Producte> getProducte(@Path("id") String id);
 
-  @DELETE("/reserves/{id}")
+  @DELETE("/productes/{id}")
   Call<ResponseBody> deleteProducte(@Path("id") String id);
 
 
 
-  @GET("/tallCabells")
-  Call<List<TallCabells>> getTallsCabells();
 
-  @GET("/tallCabells/{id}")
-  Call<TallCabells> getTallCabells(@Path("id") String id);
+  @POST("/serveiPrestat")
+  Call<IdObject> addServeiPrestat(@Body ServeiPrestat serveiPrestat);
+
+  @GET("/serveiPrestat")
+  Call<List<ServeiPrestat>> getServeisPrestats();
+
+  @GET("/serveiPrestat/{id}")
+  Call<ServeiPrestat> getServeiPrestat(@Path("id") String id);
+
+  @DELETE("/serveiPrestat/{id}")
+  Call<ResponseBody> deleteServeiPrestat(@Path("id") String id);
 
 }
 

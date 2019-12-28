@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "91600473356",
+    "firebase_url": "https://peluqueria-dtellez.firebaseio.com",
+    "project_id": "peluqueria-dtellez",
+    "storage_bucket": "peluqueria-dtellez.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91600473356:android:13af720d40a0fbf9ae4d29",
+        "android_client_info": {
+          "package_name": "org.udg.pds.todoandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91600473356-rp51rkhs4kgf4jokb69lhm6gals0frto.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeK7IY0aclXFm03qzj3Sl5GWOFxysNFSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91600473356-rp51rkhs4kgf4jokb69lhm6gals0frto.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

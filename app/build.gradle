@@ -2,9 +2,10 @@ buildscript {
     repositories {
         jcenter()
         google()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.android.tools.build:gradle:3.5.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -21,7 +22,7 @@ android {
     }
 
     compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "org.udg.pds.todoandroid"
@@ -50,9 +51,11 @@ android {
 dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
     implementation 'com.squareup.okhttp3:okhttp:4.0.0-alpha02'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.0.0-alpha02'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
+
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
@@ -61,4 +64,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta1'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
 }
+apply plugin: 'com.google.gms.google-services'

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:id="@+id/activitat_estadistiques_total_vendes"
-    android:background="@drawable/gradient"
-    android:fadingEdge="horizontal"
+    android:id="@+id/activitat_calendari_dia"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#8BB6F5"
+    tools:context=".activity.ActivitatReserva">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"
@@ -28,26 +28,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
-        android:shadowColor="#FFFFFF"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="3"
-        android:text="Comparar total dinero\naño pasado y actual"
-        android:textAlignment="center"
-        android:textColor="#6EA1EC"
-        android:textSize="26sp"
+        android:text="LISTADO CLIENTES\n(MES)"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
-    <com.anychart.AnyChartView
-        android:id="@+id/any_chart_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="50dp" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rVclients"
+        android:layout_width="match_parent"
+        android:layout_height="505dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="90dp" />
+
+    <TextView
+        android:id="@+id/totalDiners"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="65dp"
+        android:background="#991AC01F"
+        android:fontFamily="sans-serif-smallcaps"
+        android:gravity="center_horizontal"
+        android:text=" Total beneficios: 0€ "
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 
 
