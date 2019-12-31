@@ -2,9 +2,9 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -43,6 +43,9 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
 
     TodoApi mTodoService;
     public ArrayList<Client> llistaClients2;
+
+    Integer anyActual;
+    Integer mesInicial;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -88,20 +91,31 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Comparar total dinero\naño pasado y actual");
+        titol.setText("Comparar total dinero\nentre los dos últimos años");
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
     }
 
 
     //Pre: Les dues dates d'entrada són correctes
-    //Post: fa la crida als clients que es troben entre les dues dates entrades per paràmetre i mostra els gràfics a partir d'aquests
+    //Post: fa la crida als clients que es troben entre la data d'avui i la del gener de l'any anterior i mostra els gràfics a partir d'aquests
     public void ferGrafic(){
         llistaClients2 = new ArrayList<>();
 
+        //Calendar data2 = new GregorianCalendar(2020, 00, 30);
         Calendar data2 = GregorianCalendar.getInstance();
-        Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
+
+        anyActual = data2.get(Calendar.YEAR)-2;
+        mesInicial = data2.get(Calendar.MONTH)+1;
+
+        if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+            anyActual++;
+            mesInicial = 00;
+        }
+
+        Date data1 = new GregorianCalendar(anyActual, mesInicial, 01).getTime();
         Date data2F = data2.getTime();
+
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
         String sData1 = format.format(data1);
@@ -120,7 +134,7 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                Toast.makeText(Estad_BarresCompararDiners.this, "Error 2 cargando datos", Toast.LENGTH_LONG).show();
+                Toast.makeText(Estad_BarresCompararDiners.this, "Fallo cargando datos", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -129,32 +143,40 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
     //Pre: clients no és buid
     //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
-    public void tractarDades(Collection<Client> clients) {
-        //HAY QUE ASEGURARSE QUE HAY DATOS DE LOS ULTIMOS 12 MESES EN LOS DOS!!!
-        //QUE PASA SI UN MES ESTA EN UN AÑO Y EN OTRO NO?
+    public void tractarDades(List<Client> clients) {
 
         List<DataEntry> dataPasado = new ArrayList<>();
         List<DataEntry> dataActual = new ArrayList<>();
         Integer total = 0;
         String mes = null;
-        String mesInicial = null;
-        Boolean nouAny = false;
+        List<String> mesosAMostrar = new ArrayList<>();
+        Boolean segonaEtapa = false;
+
         for(Client auxClient : clients){
+
             if (mes==null){
                 mes = obtenirNomMes(auxClient.getDataClient());
-                mesInicial = mes;
+                mesosAMostrar.add(mes);
                 total += auxClient.getPreuTotal();
             }
             else if (!obtenirNomMes(auxClient.getDataClient()).equals(mes)){    //Si el mes del client auxClient és diferent al de anterior
-                if (nouAny)  //Fem estadístiques dels últims 13 mesos
-                    dataActual.add(new ValueDataEntry(mes, total));
-                else
+                if (segonaEtapa) {  //Fem estadístiques del darrer any
+                    if (mesosAMostrar.contains(mes))
+                        dataActual.add(new ValueDataEntry(mes, total));
+                }
+                else {
                     dataPasado.add(new ValueDataEntry(mes, total));
+                }
                 mes = obtenirNomMes(auxClient.getDataClient());
                 total = auxClient.getPreuTotal();
-                if (mes.equals(mesInicial)) nouAny = true;
+
+                if (Integer.valueOf((String) DateFormat.format("MM", auxClient.getDataClient())).equals(mesInicial+1))
+                    segonaEtapa = true;
+                else
+                    mesosAMostrar.add(mes);
             }
-            else total += auxClient.getPreuTotal();
+            else if (mesosAMostrar.contains(mes))
+                total += auxClient.getPreuTotal();
         }
 
         dataActual.add(new ValueDataEntry(mes, total));   //Afegim el darrer mes calculat
@@ -164,25 +186,26 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
 
     //Pre: data no és buida
     //Post: mostra el gràfic de barres a partir de la llista data d'entrada.
-    public void dibuixarGrafic(List<DataEntry> anyPassat, List<DataEntry> anyActual) {
+    public void dibuixarGrafic(List<DataEntry> dadesAnyPassat, List<DataEntry> dadesAnyActual) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         Cartesian cartesian = AnyChart.column();
 
-        Column column1 = cartesian.column(anyPassat);
-        column1.name("Año pasado")
-                .color("HotPink");
+        Column column1 = cartesian.column(dadesAnyPassat);
+        column1.name("Etapa anterior")
+                .color("#FF8A65");
         column1.tooltip()
-                .titleFormat("{%X}")
+                .titleFormat("{%X} (etapa anterior)")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)
                 .offsetY(5d)
                 .format("{%Value} €");
 
-        Column column2 = cartesian.column(anyActual);
-        column2.name("Año actual");
+        Column column2 = cartesian.column(dadesAnyActual);
+        column2.name("Etapa actual")
+                .color("#8BB6F5");
         column2.tooltip()
-                .titleFormat("{%X}")
+                .titleFormat("{%X} (etapa actual)")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)
@@ -213,18 +236,18 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String mes  = (String) DateFormat.format("MM",  data);
 
-        if (mes.equals("01")) return "ENERO";
-        else if (mes.equals("02")) return "FEBRERO";
-        else if (mes.equals("03")) return "MARZO";
-        else if (mes.equals("04")) return "ABRIL";
-        else if (mes.equals("05")) return "MAYO";
-        else if (mes.equals("06")) return "JUNIO";
-        else if (mes.equals("07")) return "JULIO";
-        else if (mes.equals("08")) return "AGOSTO";
-        else if (mes.equals("09")) return "SETIEMBRE";
-        else if (mes.equals("10")) return "OCTUBRE";
-        else if (mes.equals("11")) return "NOVIEMBRE";
-        else return "DICIEMBRE";
+        if (mes.equals("01")) return "enero";
+        else if (mes.equals("02")) return "febrero";
+        else if (mes.equals("03")) return "marzo";
+        else if (mes.equals("04")) return "abril";
+        else if (mes.equals("05")) return "mayo";
+        else if (mes.equals("06")) return "junio";
+        else if (mes.equals("07")) return "julio";
+        else if (mes.equals("08")) return "agosto";
+        else if (mes.equals("09")) return "septiembre";
+        else if (mes.equals("10")) return "octubre";
+        else if (mes.equals("11")) return "noviembre";
+        else return "diciembre";
     }
 }
 

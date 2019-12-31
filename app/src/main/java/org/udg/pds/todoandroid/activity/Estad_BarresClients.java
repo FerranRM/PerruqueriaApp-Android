@@ -2,9 +2,9 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -124,7 +124,7 @@ public class Estad_BarresClients extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                Toast.makeText(Estad_BarresClients.this, "Error 2 cargando datos", Toast.LENGTH_LONG).show();
+                Toast.makeText(Estad_BarresClients.this, "Fallo cargando datos", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -9,7 +9,7 @@
     android:background="#8BB6F5"
     tools:context=".activity.Calendari">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -23,19 +23,37 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu"/>
 
+
+    <TextView
+        android:id="@+id/titolCalendari"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:gravity="center_vertical"
+        android:inputType="textPersonName"
+        android:text="Calendario reservas"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+
     <TextView
         android:id="@+id/textData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="74dp"
+        android:gravity="center_vertical"
+        android:inputType="textPersonName"
+        android:text="fecha actual"
         android:textAlignment="center"
-        android:textSize="25sp"
-        android:text=" "
-        android:textStyle="bold"/>
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
 
     <CalendarView
         android:id="@+id/calendarView"
@@ -51,13 +69,14 @@
         android:id="@+id/totalReserves"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="90dp"
+        android:text="Total reservas para hoy: 0"
         android:textAlignment="center"
+        android:textColor="#383838"
         android:textSize="15sp"
-        android:textColor="#FFFFFF"
-        android:text="Total reservas para hoy: 0" />
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

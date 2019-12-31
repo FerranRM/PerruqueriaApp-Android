@@ -4,10 +4,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,19 +122,16 @@ public class Ajustos extends AppCompatActivity {
         });
     }
 
-    //Pre:
-    //Post:
+    //Pre: --
+    //Post: modifica la imatge de perfil aleatoriament entre unes imatges ja predefinides
     public void modificarImatge(View view) {
         ImageView modImatge = findViewById(R.id.imatgePerfil);
         int n = new Random().nextInt(imatges.length-1);
         modImatge.setImageResource(imatges[n]);
-
-        Toast toast = Toast.makeText(Ajustos.this, "IMAGEN CAMBIADA", Toast.LENGTH_SHORT);
-        toast.show();
     }
 
 
-    //Pre:
+    //Pre: --
     //Post:
     public void afegirProducte(View view) {
 
@@ -171,7 +168,7 @@ public class Ajustos extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<IdObject> call, Throwable t) {
-                                Toast toast = Toast.makeText(Ajustos.this, "Error 2 al añadir el producto", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(Ajustos.this, "Fallo al añadir el producto", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                         });
@@ -212,7 +209,7 @@ public class Ajustos extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Producte>> call, Throwable t) {
-                Toast toast = Toast.makeText(Ajustos.this, "Error 2 obteniendo listado de productos", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Ajustos.this, "Fallo obteniendo listado de productos", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -256,7 +253,7 @@ public class Ajustos extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<IdObject> call, Throwable t) {
-                                Toast toast = Toast.makeText(Ajustos.this, "Error 2 al añadir el servicio", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(Ajustos.this, "Fallo al añadir el servicio", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                         });
@@ -298,33 +295,6 @@ public class Ajustos extends AppCompatActivity {
                 toast.show();
             }
         });
-    }
-
-
-    //Pre:
-    //Post:
-    public void modificarPerfilPerruquer(View view){
-        /*Call<Response> call = mTodoService.logout();
-        call.enqueue(new Callback<Response>() {
-            @Override
-            public void onResponse(Call<Response> call, Response<Response> response) {
-
-                if (response.isSuccessful()) {
-                    Ajustos.this.startActivity(new Intent(Ajustos.this, Login.class));
-                    Ajustos.this.finish();
-                } else {
-
-                    Toast toast = Toast.makeText(Ajustos.this, "Error cerrando sesión "+response.raw(), Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Response> call, Throwable t) {
-                Toast toast = Toast.makeText(Ajustos.this, "Error cerrando sesión in 2", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });*/
     }
 
 
@@ -389,7 +359,7 @@ public class Ajustos extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             eliminatOk[0] =false;
-                            Toast toast = Toast.makeText(Ajustos.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(Ajustos.this, "Fallo: "+t.getMessage(), Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });
@@ -442,7 +412,7 @@ public class Ajustos extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ServeiPrestat>> call, Throwable t) {
-                Toast toast = Toast.makeText(Ajustos.this, "Error 2 obteniendo listado de servicios prestados", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Ajustos.this, "Fallo obteniendo listado de servicios prestados", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -501,7 +471,7 @@ public class Ajustos extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             eliminatOk[0] =false;
-                            Toast toast = Toast.makeText(Ajustos.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(Ajustos.this, "Fallo: "+t.getMessage(), Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });

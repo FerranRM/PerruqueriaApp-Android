@@ -3,10 +3,10 @@ package org.udg.pds.todoandroid.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -113,25 +113,20 @@ public class ActivitatClient extends AppCompatActivity {
     //      Altrament es guarda el client a la BD mitjaçant el mètode guardarClientBD.
     public void guardarClient(View view) {
         String clientFet = comprovarSexe();
-        if (clientFet=="!") mostrarAlerta("Tipo de sexo no seleccionado");
+        if (clientFet=="!") mostrarAlerta("Por favor, introduce el género del cliente");
         else {
+            clientFet += "1/";
 
-            String aux = comprovarTall();
+            EditText nomClient = (EditText) findViewById(R.id.nomClient);
+            String aux = nomClient.getText().toString();
+            if (aux.isEmpty()) mostrarAlerta("Por favor, introduce el nombre del cliente");
+            else {
+                clientFet += aux + "/";
+                aux = productes();
+                clientFet += aux+"/"+preuTotal.toString();
 
-            if (aux == "!") mostrarAlerta("Tipo de corte no seleccionado");
-            else{
-                clientFet += aux;
-
-                EditText nomClient = (EditText) findViewById(R.id.nomClient);
-                aux = nomClient.getText().toString();
-                if (aux.isEmpty()) mostrarAlerta("Nombre cliente no introducido");
-                else {
-                    clientFet += aux + "/";
-                    aux = productes();
-                    clientFet += aux+"/"+preuTotal.toString();
-
-                    guardarClientBD(clientFet);
-                }
+                if (preuTotal!=0) guardarClientBD(clientFet);
+                else mostrarAlerta("Por favor, selecciona un servicio y/o producto");
             }
         }
     }
@@ -218,7 +213,7 @@ public class ActivitatClient extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ServeiPrestat>> call, Throwable t) {
-                Toast toast = Toast.makeText(ActivitatClient.this, "Error 2 obteniendo listado de productos", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(ActivitatClient.this, "Fallo obteniendo listado de productos", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -316,7 +311,7 @@ public class ActivitatClient extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Producte>> call, Throwable t) {
-                Toast toast = Toast.makeText(ActivitatClient.this, "Error 2 obteniendo listado de productos", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(ActivitatClient.this, "Fallo obteniendo listado de productos", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -426,7 +421,7 @@ public class ActivitatClient extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<IdObject> call, Throwable t) {
-                Toast toast = Toast.makeText(ActivitatClient.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(ActivitatClient.this, "Fallo: "+t.getMessage(), Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -463,7 +458,7 @@ public class ActivitatClient extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast toast = Toast.makeText(ActivitatClient.this, "Error 2 al añadir productos", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(ActivitatClient.this, "Fallo al añadir productos", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             });

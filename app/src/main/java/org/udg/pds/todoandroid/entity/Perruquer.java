@@ -8,6 +8,14 @@ public class Perruquer {
 
   public Perruquer() { }
 
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
   public String getNomPerruquer() {
     return nomPerruquer;
   }

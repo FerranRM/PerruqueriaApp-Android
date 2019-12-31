@@ -9,7 +9,7 @@
     android:background="#8BB6F5"
     tools:context=".activity.Ajustos">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -36,13 +36,16 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imatgePerfil"
         android:layout_width="475px"
         android:layout_height="500px"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="95dp"
-        android:src="@drawable/noi1" />
+        android:src="@drawable/noi1"
+        android:onClick="modificarImatge"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/nomPerruquer"
@@ -108,25 +111,11 @@
         android:onClick="eliminarServei"/>
 
     <Button
-        android:id="@+id/modificarNom"
-        android:layout_width="170dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="520dp"
-        android:layout_marginLeft="25dp"
-        android:background="@drawable/boto_efecte_blanc"
-        android:text="Modificar nombre"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:onClick="modificarPerfilPerruquer"/>
-
-    <Button
         android:id="@+id/sortirCompte"
         android:layout_width="170dp"
         android:layout_height="60dp"
         android:layout_marginTop="520dp"
-        android:layout_marginRight="25dp"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/boto_efecte_vermell"
         android:text="Salir de la cuenta"
         android:textColor="#FFFFFF"
@@ -137,8 +126,8 @@
 
     <ImageButton
         android:id="@+id/instagramPerruqueria"
-        android:layout_width="140dp"
-        android:layout_height="80dp"
+        android:layout_width="47dp"
+        android:layout_height="46dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"
         android:layout_centerHorizontal="true"

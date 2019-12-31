@@ -2,9 +2,9 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +22,18 @@ import com.anychart.enums.LegendLayout;
 import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
+import org.udg.pds.todoandroid.entity.Client;
+import org.udg.pds.todoandroid.entity.Perruquer;
 import org.udg.pds.todoandroid.entity.Producte;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -79,74 +86,110 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Total productos vendidos");
-
         ferGrafic();
     }
 
 
     //Pre: --
-    //Post: fa la crida als clients que es troben entre les dues dates entrades per paràmetre i mostra els gràfics a partir d'aquests
+    //Post: fa la crida dels perruquers que hi ha a la base de dades i mostra el total que ha fet cada un el darrer any
     public void ferGrafic(){
-        Call<List<Producte>> call = mTodoService.getProductes();
 
-        call.enqueue(new Callback<List<Producte>>() {
+        Call<List<Perruquer>> callPerruquers = mTodoService.listAllPerruquers();
+        callPerruquers.enqueue(new Callback<List<Perruquer>>() {
             @Override
-            public void onResponse(Call<List<Producte>> call, Response<List<Producte>> response) {
+            public void onResponse(Call<List<Perruquer>> call, Response<List<Perruquer>> response) {
                 if (response.isSuccessful()) {
                     tractarDades(response.body());
                 } else {
-                    Toast.makeText(Estad_PastisTotalDiners.this, "Error cargando datos", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Estad_PastisTotalDiners.this, "Error cargando lista peluqueros", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Producte>> call, Throwable t) {
-                Toast.makeText(Estad_PastisTotalDiners.this, "Error 2 cargando datos", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<Perruquer>> call, Throwable t) {
+                Toast.makeText(Estad_PastisTotalDiners.this, "Fallo cargando lista peluqueros", Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
 
-    //Pre: clients no és buid
-    //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
+
+    //Pre: perruquers no és buid
+    //Post: agafa la col·lecció de perruquers i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
-    public void tractarDades(Collection<Producte> productes) {
-        List<String> nomProductes = new ArrayList<>();
-        List<Integer> totalProductes = new ArrayList<>();
+    private void tractarDades(List<Perruquer> perruquers) {
 
-        for(Producte auxProducte : productes){
-            if (nomProductes.contains(auxProducte.getDescripcioProducte())){
-                Integer valorAnterior = totalProductes.indexOf(auxProducte.getDescripcioProducte()) + 1;
-                totalProductes.set(totalProductes.indexOf(auxProducte.getDescripcioProducte()), valorAnterior);
-            }
-            else {
-                nomProductes.add(auxProducte.getDescripcioProducte());
-                totalProductes.add(auxProducte.getPreuProducte());
+        List<String> llistatNomPerruquers = new ArrayList<>();
+        List<Integer> llistatTotalVendes = new ArrayList<>();
+
+        TextView titol = findViewById(R.id.titolCalendariDia);
+
+        for(Perruquer auxPerruquer : perruquers){
+            Calendar data2 = GregorianCalendar.getInstance();
+
+            int anyInicial = data2.get(Calendar.YEAR)-1;
+            int mesInicial = data2.get(Calendar.MONTH)+1;
+
+            if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+                anyInicial++;
+                mesInicial = 00;
             }
 
+            Date data1 = new GregorianCalendar(anyInicial, mesInicial, 01).getTime();
+            Date data2F = data2.getTime();
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
+            String sData1 = format.format(data1);
+            String sData2 = format.format(data2F);
+
+            titol.setText("Total dinero de cada peluquero\n01/"+(mesInicial+1)+"/"+anyInicial +" - "+ data2.get(Calendar.DAY_OF_MONTH)+"/"+(data2.get(Calendar.MONTH)+1)+"/"+data2.get(Calendar.YEAR));
+
+            Call<List<Client>> call = mTodoService.listAllClients(sData1,sData2, auxPerruquer.getId());
+            call.enqueue(new Callback<List<Client>>() {
+                @Override
+                public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
+                    if (response.isSuccessful()) {
+                        llistatNomPerruquers.add(auxPerruquer.getNomUsuari());
+
+                        int numTotalVendes = 0;
+                        for(Client auxClient : response.body()){
+                            numTotalVendes += auxClient.getPreuTotal();
+                        }
+                        llistatTotalVendes.add(numTotalVendes);
+
+
+
+                        dibuixarGrafic(llistatNomPerruquers, llistatTotalVendes);
+                    } else {
+                        Toast.makeText(Estad_PastisTotalDiners.this, "Error cargando lista clientes", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Client>> call, Throwable t) {
+                    Toast.makeText(Estad_PastisTotalDiners.this, "Fallo cargando lista clientes", Toast.LENGTH_LONG).show();
+                }
+            });
         }
-        dibuixarGrafic(nomProductes, totalProductes);
+
+
     }
+
+
 
     //Pre: ambdues llistes no són buides
     //Post: mostra el gràfic pastís del total de cada producte venut i també el tant per cent corresponent entre tots els productes venuts.
-    public void dibuixarGrafic(List<String> nomProductes, List<Integer> totalProductes) {
+    public void dibuixarGrafic(List<String> llistatNomPerruquers, List<Integer> llistatTotalVendes) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
 
         Pie pie = AnyChart.pie();
 
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-                Toast.makeText(Estad_PastisTotalDiners.this, event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
         List<DataEntry> data = new ArrayList<>();
-        for(int i = 0; i<nomProductes.size(); i++){
-            data.add(new ValueDataEntry(nomProductes.get(i),totalProductes.get(i)));
+        for(int i = 0; i<llistatNomPerruquers.size(); i++){
+            data.add(new ValueDataEntry(llistatNomPerruquers.get(i),llistatTotalVendes.get(i)));
         }
 
         pie.data(data);
@@ -157,8 +200,14 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
 
         pie.legend().title().enabled(true);
         pie.legend().title()
-                .text("PRODUCTOS")
+                .text("Peluquero")
                 .padding(0d, 0d, 10d, 0d);
+
+        pie.tooltip()
+                .format("{%Value} € ");
+
+
+
 
         pie.legend()
                 .position("center-bottom")

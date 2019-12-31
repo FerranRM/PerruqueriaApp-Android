@@ -1,7 +1,7 @@
 package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -46,9 +46,6 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                /*SplashScreen.this.startActivity(new Intent(SplashScreen.this, Login.class));
-                SplashScreen.this.finish();*/
-
                 Toast toast = Toast.makeText(SplashScreen.this, "Error checking login status", Toast.LENGTH_SHORT);
                 toast.show();
             }

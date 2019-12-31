@@ -3,9 +3,9 @@ package org.udg.pds.todoandroid.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -107,20 +107,20 @@ public class Calendari extends AppCompatActivity {
         Date currentTime = Calendar.getInstance().getTime();
         String diaActual  = (String) DateFormat.format("dd",  currentTime);
         String mesActual  = (String) DateFormat.format("MM",  currentTime);
-        if (mesActual.compareTo("01")==0) mesActual = "ENERO";
-        else if (mesActual.compareTo("02")==0) mesActual = "FEBRERO";
-        else if (mesActual.compareTo("03")==0) mesActual = "MARZO";
-        else if (mesActual.compareTo("04")==0) mesActual = "ABRIL";
-        else if (mesActual.compareTo("05")==0) mesActual = "MAYO";
-        else if (mesActual.compareTo("06")==0) mesActual = "JUNIO";
-        else if (mesActual.compareTo("07")==0) mesActual = "JULIO";
-        else if (mesActual.compareTo("08")==0) mesActual = "AGOSTO";
-        else if (mesActual.compareTo("09")==0) mesActual = "SETIEMBRE";
-        else if (mesActual.compareTo("10")==0) mesActual = "OCTUBRE";
-        else if (mesActual.compareTo("11")==0) mesActual = "NOVIEMBRE";
-        else mesActual = "DICIEMBRE";
+        if (mesActual.compareTo("01")==0) mesActual = "enero";
+        else if (mesActual.compareTo("02")==0) mesActual = "febrero";
+        else if (mesActual.compareTo("03")==0) mesActual = "marzo";
+        else if (mesActual.compareTo("04")==0) mesActual = "abril";
+        else if (mesActual.compareTo("05")==0) mesActual = "mayo";
+        else if (mesActual.compareTo("06")==0) mesActual = "junio";
+        else if (mesActual.compareTo("07")==0) mesActual = "julio";
+        else if (mesActual.compareTo("08")==0) mesActual = "agosto";
+        else if (mesActual.compareTo("09")==0) mesActual = "setiembre";
+        else if (mesActual.compareTo("10")==0) mesActual = "octubre";
+        else if (mesActual.compareTo("11")==0) mesActual = "noviembre";
+        else mesActual = "diciembre";
 
-        return (diaActual+" de "+mesActual);
+        return ("-  " + diaActual+" de "+mesActual + "  -");
     }
 
 
@@ -153,7 +153,7 @@ public class Calendari extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Reserva>> call, Throwable t) {
-                Toast toast = Toast.makeText(Calendari.this, "Error 2 obteniendo listado de reservas", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Calendari.this, "Fallo obteniendo listado de reservas", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

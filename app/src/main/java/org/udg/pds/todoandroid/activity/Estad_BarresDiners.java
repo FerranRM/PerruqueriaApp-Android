@@ -2,9 +2,9 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -16,7 +16,6 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
 import com.anychart.core.cartesian.series.Column;
-import com.anychart.core.ui.Background;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
@@ -44,8 +43,6 @@ import retrofit2.Response;
 public class Estad_BarresDiners extends AppCompatActivity {
 
     TodoApi mTodoService;
-
-    public ArrayList<Client> llistaClients;
 
 
 
@@ -102,10 +99,18 @@ public class Estad_BarresDiners extends AppCompatActivity {
     //Post: fa la crida als clients que es troben entre la data d'avui i la de fa un any (des del dia 01) i mostra el gràfic dels
     //      diners fets cada mes a partir de les dades d'aquest període
     public void ferGrafic(){
-        llistaClients = new ArrayList<>();
 
         Calendar data2 = GregorianCalendar.getInstance();
-        Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
+
+        int anyInicial = data2.get(Calendar.YEAR)-1;
+        int mesInicial = data2.get(Calendar.MONTH)+1;
+
+        if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+            anyInicial++;
+            mesInicial = 00;
+        }
+
+        Date data1 = new GregorianCalendar(anyInicial, mesInicial, 01).getTime();
         Date data2F = data2.getTime();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
@@ -125,7 +130,7 @@ public class Estad_BarresDiners extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                Toast.makeText(Estad_BarresDiners.this, "Error 2 cargando datos", Toast.LENGTH_LONG).show();
+                Toast.makeText(Estad_BarresDiners.this, "Fallo cargando datos", Toast.LENGTH_LONG).show();
             }
         });
     }

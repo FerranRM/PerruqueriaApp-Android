@@ -34,6 +34,9 @@ public interface TodoApi {
   @GET("/perruquers/me")
   Call<Perruquer> getIdPerruquer();
 
+  @GET("/perruquers")
+  Call<List<Perruquer>> listAllPerruquers();
+
 
 
 
@@ -60,6 +63,9 @@ public interface TodoApi {
 
   @GET("/clients")
   Call<List<Client>> listAllClients(@Query("data1") String data1, @Query("data2") String data2);
+
+  @GET("/clients")
+  Call<List<Client>> listAllClients(@Query("data1") String data1, @Query("data2") String data2, @Query("idPerruquer") Long idPerruquer);
 //POSTMAN: http://localhost:8080/clients?data1=2018-07-01T17:36:00&data2=2018-08-20T17:36:00
 
 

@@ -26,11 +26,11 @@
 
         <Button
             android:id="@+id/afegir_client_hora_button"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
-            android:layout_margin="3dp"
-            android:background="#3F51B5"
+            android:layout_marginLeft="35dp"
+            android:background="#8BB6F5"
             android:fontFamily="@font/technasansregular"
             android:onClick="onClickHoraClient"
             android:text="@string/button_set"
@@ -52,17 +52,18 @@
             android:text="@string/nombre_cliente"
             android:layout_gravity="left|center_vertical"
             android:layout_margin="3dp"/>
+
         <EditText
             android:id="@+id/afegir_client_nom"
-            android:textIsSelectable="true"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center|center_vertical"
+            android:layout_marginLeft="5dp"
             android:layout_weight="0.4"
-            android:layout_margin="3dp"
             android:background="#D9DFF8"
+            android:gravity="center|center_vertical"
             android:inputType="textPersonName"
-            android:gravity="center|center_vertical"/>
+            android:textIsSelectable="true" />
     </LinearLayout>
 
 </LinearLayout>

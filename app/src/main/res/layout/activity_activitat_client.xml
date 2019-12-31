@@ -9,7 +9,7 @@
     android:background="#8BB6F5"
     tools:context=".activity.ActivitatClient">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -25,16 +25,18 @@
 
     <EditText
         android:id="@+id/nomClient"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#B9FFFFFF"
+        android:gravity="center_vertical"
+        android:hint="Nombre cliente"
+        android:inputType="textPersonName"
         android:textAlignment="center"
-        android:hint="Nombre cliente"/>
+        android:textColor="#FFFFFF"
+        android:textColorHint="#C1FFFFFF"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/titol1"
@@ -85,7 +87,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="245dp"
         android:background="@drawable/boto_efecte_blanc"
-        android:text="CORTES DE PELO"
+        android:text="SERVICIOS DISPONIBLES"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -97,7 +99,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="310dp"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="Ningún corte de pelo escogido"
+        android:text="Ningún servicio seleccionado"
         android:textColor="#FFFFFF" />
 
 

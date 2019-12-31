@@ -9,7 +9,7 @@
     android:background="#8BB6F5"
     tools:context=".activity.ActivitatReserva">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -37,7 +37,7 @@
         android:textStyle="bold" />
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rVclients"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

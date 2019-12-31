@@ -2,9 +2,9 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -101,8 +101,18 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
     public void ferGrafic(){
         llistaClients2 = new ArrayList<>();
 
+        //Calendar data2 = new GregorianCalendar(2020, 00, 30);
         Calendar data2 = GregorianCalendar.getInstance();
-        Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR)-1, data2.get(Calendar.MONTH), 01).getTime();
+
+        int anyInicial = data2.get(Calendar.YEAR)-1;
+        int mesInicial = data2.get(Calendar.MONTH)+1;
+
+        if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+            anyInicial++;
+            mesInicial = 00;
+        }
+
+        Date data1 = new GregorianCalendar(anyInicial, mesInicial, 01).getTime();
         Date data2F = data2.getTime();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
@@ -110,11 +120,12 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         String sData2 = format.format(data2F);
 
         Call<List<Client>> call = mTodoService.listAllClients(sData1,sData2);
+        int finalAnyInicial = anyInicial;
         call.enqueue(new Callback<List<Client>>() {
             @Override
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
                 if (response.isSuccessful()) {
-                    tractarDades(response.body(), data2.get(Calendar.YEAR)-1);
+                    tractarDades(response.body(), finalAnyInicial);
                 } else {
                     Toast.makeText(Estad_BarresCompararSexes.this, "Error cargando datos", Toast.LENGTH_LONG).show();
                 }
@@ -122,7 +133,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                Toast.makeText(Estad_BarresCompararSexes.this, "Error 2 cargando datos", Toast.LENGTH_LONG).show();
+                Toast.makeText(Estad_BarresCompararSexes.this, "Fallo cargando datos", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -139,39 +150,57 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         String mesH = null;
         String mesD = null;
         String mesInicial = null;
+
+        Integer anyHomes = anyAnterior;
+        Integer anyDones= anyAnterior;
+
+        List<String> mesosAMostrar = new ArrayList<>();
+
         for(Client auxClient : clients){
+            String numeroMes = (String) DateFormat.format("MM", auxClient.getDataClient());
+
             if (auxClient.getSexeClient()){ //És Home
                 if (mesH==null){ //El primer client (inicialitzem les dues variables)
                     mesH = obtenirNomMes(auxClient.getDataClient());
-                    if (mesInicial==null) mesInicial = mesH;
+                    if (mesInicial==null) {
+                        mesInicial = mesH;
+                        mesosAMostrar.add(numeroMes);
+                    }
                     totalH += auxClient.getPreuTotal();
                 }
                 else if (!obtenirNomMes(auxClient.getDataClient()).equals(mesH)){    //Si el mes del client auxClient és diferent al de anterior
-                    dataHomes.add(new ValueDataEntry(mesH+" "+anyAnterior, totalH));
+                    dataHomes.add(new ValueDataEntry(mesH+" "+anyHomes, totalH));
                     mesH = obtenirNomMes(auxClient.getDataClient());
                     totalH = auxClient.getPreuTotal();
-                    if (mesH.equals(mesInicial)) anyAnterior++;
+                    if (mesH.equals("ENERO")) {
+                        anyHomes++;
+                    }
                 }
                 else totalH += auxClient.getPreuTotal();
             }
             else{
                 if (mesD==null){ //El primer client (inicialitzem les dues variables)
                     mesD = obtenirNomMes(auxClient.getDataClient());
-                    if (mesInicial==null) mesInicial = mesD;
+                    if (mesInicial==null) {
+                        mesInicial = mesD;
+                        mesosAMostrar.add(numeroMes);
+                    }
                     totalD += auxClient.getPreuTotal();
                 }
                 else if (!obtenirNomMes(auxClient.getDataClient()).equals(mesD)){    //Si el mes del client auxClient és diferent al de anterior
-                    dataDones.add(new ValueDataEntry(mesD+" "+anyAnterior, totalD));
+                    dataDones.add(new ValueDataEntry(mesD+" "+anyDones, totalD));
                     mesD = obtenirNomMes(auxClient.getDataClient());
                     totalD = auxClient.getPreuTotal();
-                    if (mesD.equals(mesInicial)) anyAnterior++;
+                    if (mesD.equals("ENERO")) {
+                        anyDones++;
+                    }
                 }
                 else totalD += auxClient.getPreuTotal();
             }
 
         }
-        dataHomes.add(new ValueDataEntry(mesH+" "+anyAnterior, totalH));   //Afegim el darrer mes calculat dels Homes
-        dataDones.add(new ValueDataEntry(mesD+" "+anyAnterior, totalD));   //Afegim el darrer mes calculat de les Dones
+        dataHomes.add(new ValueDataEntry(mesH+" "+anyHomes, totalH));   //Afegim el darrer mes calculat dels Homes
+        dataDones.add(new ValueDataEntry(mesD+" "+anyDones, totalD));   //Afegim el darrer mes calculat de les Dones
 
         dibuixarGrafic(dataHomes,dataDones);
     }
@@ -183,9 +212,10 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         Cartesian cartesian = AnyChart.column();
 
         Column column1 = cartesian.column(dataHomes);
-        column1.name("Homes");
+        column1.name("Homes")
+                .color("#8BB6F5");
         column1.tooltip()
-                .titleFormat("{%X}")
+                .titleFormat("{%X} Homes")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)
@@ -196,7 +226,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         column2.name("Dones")
                 .color("HotPink");
         column2.tooltip()
-                .titleFormat("{%X}")
+                .titleFormat("{%X} Dones")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)

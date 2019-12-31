@@ -4,12 +4,6 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,6 +13,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
 import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
@@ -38,8 +43,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static java.util.Calendar.getInstance;
 
 public class ActivitatReserva extends AppCompatActivity {
 
@@ -69,12 +72,17 @@ public class ActivitatReserva extends AppCompatActivity {
 
         String data = dataActual(); //Convertim la data que estem consultant en un format particular
 
-        crearLlista(data);  //Obtenim les reserves per a la data
+        crearLlista(data);      //Obtenim les reserves per a la data
         buildRecyclerView();    //Construim la llista de reserves
 
 
         TextView dataActual = findViewById(R.id.titolCalendariDia);
         dataActual.setText(data);
+
+
+
+        /*ServeiMissatgeriaFirebase serveiMissatgeriaFirebase = null;
+        serveiMissatgeriaFirebase.mostrarNotificacio("JJJJ", "Nueva reserva");*/
     }
 
 
@@ -152,7 +160,7 @@ public class ActivitatReserva extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Reserva>> call, Throwable t) {
-                Toast toast = Toast.makeText(ActivitatReserva.this, "Error 2 obteniendo listado de reservas", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(ActivitatReserva.this, "Fallo obteniendo listado de reservas", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -221,18 +229,18 @@ public class ActivitatReserva extends AppCompatActivity {
 
         String diaActual  = (String) DateFormat.format("dd",  data);
         String mesActual  = (String) DateFormat.format("MM",  data);
-        if (mesActual.compareTo("01")==0) mesActual = "ENERO";
-        else if (mesActual.compareTo("02")==0) mesActual = "FEBRERO";
-        else if (mesActual.compareTo("03")==0) mesActual = "MARZO";
-        else if (mesActual.compareTo("04")==0) mesActual = "ABRIL";
-        else if (mesActual.compareTo("05")==0) mesActual = "MAYO";
-        else if (mesActual.compareTo("06")==0) mesActual = "JUNIO";
-        else if (mesActual.compareTo("07")==0) mesActual = "JULIO";
-        else if (mesActual.compareTo("08")==0) mesActual = "AGOSTO";
-        else if (mesActual.compareTo("09")==0) mesActual = "SETIEMBRE";
-        else if (mesActual.compareTo("10")==0) mesActual = "OCTUBRE";
-        else if (mesActual.compareTo("11")==0) mesActual = "NOVIEMBRE";
-        else mesActual = "DICIEMBRE";
+        if (mesActual.compareTo("01")==0) mesActual = "enero";
+        else if (mesActual.compareTo("02")==0) mesActual = "febrero";
+        else if (mesActual.compareTo("03")==0) mesActual = "marzo";
+        else if (mesActual.compareTo("04")==0) mesActual = "abril";
+        else if (mesActual.compareTo("05")==0) mesActual = "mayo";
+        else if (mesActual.compareTo("06")==0) mesActual = "junio";
+        else if (mesActual.compareTo("07")==0) mesActual = "julio";
+        else if (mesActual.compareTo("08")==0) mesActual = "agosto";
+        else if (mesActual.compareTo("09")==0) mesActual = "setiembre";
+        else if (mesActual.compareTo("10")==0) mesActual = "octubre";
+        else if (mesActual.compareTo("11")==0) mesActual = "noviembre";
+        else mesActual = "diciembre";
 
         return (diaText+"\n"+diaActual+ " de "+mesActual);
     }
@@ -260,7 +268,7 @@ public class ActivitatReserva extends AppCompatActivity {
 
                     org.udg.pds.todoandroid.entity.Reserva novaReserva = new org.udg.pds.todoandroid.entity.Reserva(data, nomClient);     //Assignem valors a la ActivitatReserva
 
-                    missatge = "ActivitatReserva añadida!";
+                    missatge = "Reserva añadida!";
                     afegirReserva(novaReserva);  //Afegim la nova reserva
                 }
             })
@@ -290,6 +298,17 @@ public class ActivitatReserva extends AppCompatActivity {
                     llistaReserves.add(novaReserva);
                     llistaReserves.sort(comparator);
 
+
+
+
+                    /*ServeiMissatgeriaFirebase serveiMissatgeriaFirebase = null;
+
+                    serveiMissatgeriaFirebase.mostrarNotificacio("JJJJ", "Nueva reserva");*/
+
+
+
+
+
                     mAdapter.notifyDataSetChanged();    //Actualitzem canvis
 
                     Toast toast = Toast.makeText(ActivitatReserva.this, missatge, Toast.LENGTH_SHORT);
@@ -302,7 +321,7 @@ public class ActivitatReserva extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<IdObject> call, Throwable t) {
-                Toast toast = Toast.makeText(ActivitatReserva.this, "Error 2 al añadir la reserva", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(ActivitatReserva.this, "Fallo al añadir la reserva", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
@@ -312,22 +331,18 @@ public class ActivitatReserva extends AppCompatActivity {
     // CREACIÓ BOTÓ RELLOTGE PER TRIAR HORA
     public void onClickHoraClient(View infoClient) {
         Button dateButton = (Button) infoClient.findViewById(R.id.afegir_client_hora_button);
-        // Show the date selection dialog when the "Set" button is pressed
-        // Es mostra un rellotje per pantalla a l'hora de fer click al botó 'Escoger hora'
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                TimePickerDialog horaPickerDialog = new TimePickerDialog(ActivitatReserva.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        if (minute<10 && hourOfDay>9) dateButton.setText(hourOfDay + ":0" + minute);   //Possem un 0 davant per als minuts (Si és < 10)
-                        else if (minute<10 && hourOfDay<10) dateButton.setText("0"+hourOfDay + ":0" + minute);
-                        else if (minute>9 && hourOfDay<10) dateButton.setText("0"+hourOfDay + ":" + minute);
-                        else  dateButton.setText(hourOfDay + ":" + minute);
-                    }
-                },8,0,true);
-                horaPickerDialog.show();
+
+        TimePickerDialog horaPickerDialog = new TimePickerDialog(ActivitatReserva.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (minute<10 && hourOfDay>9) dateButton.setText(hourOfDay + ":0" + minute);   //Possem un 0 davant per als minuts (Si és < 10)
+                else if (minute<10 && hourOfDay<10) dateButton.setText("0"+hourOfDay + ":0" + minute);
+                else if (minute>9 && hourOfDay<10) dateButton.setText("0"+hourOfDay + ":" + minute);
+                else  dateButton.setText(hourOfDay + ":" + minute);
             }
-        });
+        },8,0,true);
+        horaPickerDialog.show();
+
     }
 
     //Pre: posicio existeix a llistaReserves
@@ -359,14 +374,11 @@ public class ActivitatReserva extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast toast = Toast.makeText(ActivitatReserva.this, "Error 2: "+t.getMessage(), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(ActivitatReserva.this, "Fallo: "+t.getMessage(), Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
 
-
-        AlertDialog mDialog = mBuilder.create();
-        mDialog.show();
     }
 
 
@@ -432,7 +444,7 @@ public class ActivitatReserva extends AppCompatActivity {
 
             @Override
             public void onDeleteClick(int position) {
-                missatge = "ActivitatReserva eliminada!";
+                missatge = "Reserva eliminada!";
                 removeItem(position);
             }
         });

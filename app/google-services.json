@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "91600473356-o34fg02i7pb59kgujcs6vv9auf52skkl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.udg.pds.todoandroid",
+            "certificate_hash": "b813e04c1b2620dd0fde89669dab5a98a9a46846"
+          }
+        },
+        {
           "client_id": "91600473356-rp51rkhs4kgf4jokb69lhm6gals0frto.apps.googleusercontent.com",
           "client_type": 3
         }

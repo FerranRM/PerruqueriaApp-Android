@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:baselineAligned="false"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
         android:padding="2dp"
         android:showDividers="beginning|middle|end">
 
@@ -29,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.4"
-            android:layout_margin="3dp"
+            android:layout_marginLeft="40dp"
             android:background="#D9DFF8"
             android:inputType="number"
             android:gravity="center|center_vertical"/>
@@ -40,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:baselineAligned="false"
+        android:layout_marginRight="7dp"
         android:padding="2dp"
         android:showDividers="beginning|middle|end">
 
@@ -57,7 +60,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center|center_vertical"
             android:layout_weight="0.4"
-            android:layout_margin="3dp"
+            android:layout_marginLeft="4dp"
             android:background="#D9DFF8"
             android:inputType="textPersonName"
             android:gravity="center|center_vertical"/>

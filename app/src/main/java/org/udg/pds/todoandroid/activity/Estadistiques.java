@@ -2,10 +2,10 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -68,7 +68,7 @@ public class Estadistiques extends AppCompatActivity implements SingleChoiceDial
     }
 
 
-    //Canvi a pantalla llistat clients (Nom client i quant diner s'ha deixat). Abans de canviar surt un fragment per triar el mes que es vol consultar
+    //Canvi a PANTALLA llistat clients (Nom client i quant diner s'ha deixat). Abans de canviar surt un fragment per triar el mes que es vol consultar
     public void llistatClientsFets(View v){
         DialogFragment singleChoiceDialog = new SingleChoiceDialogFragment();
         singleChoiceDialog.setCancelable(false);
@@ -89,38 +89,35 @@ public class Estadistiques extends AppCompatActivity implements SingleChoiceDial
 
 
 
-
-    //Canvi a pantalla estadística total vendes
+    //Canvi a PANTALLA ESTADÍSTICA total guanys el darrer any
     public void estdTotalDiners(View v){
         Intent intent = new Intent(Estadistiques.this, Estad_BarresDiners.class);
         startActivity(intent);
     }
 
-    //Canvi a pantalla estadística total vendes
-    public void estdTotalVendes(View v){
-        Intent intent = new Intent(Estadistiques.this, Estad_TotalVendes.class);
-        startActivity(intent);
-    }
 
-    //Canvi a pantalla estadística total vendes
-    public void estdTotaClients(View v){
+    //Canvi a PANTALLA ESTADÍSTICA número total de clients el darrer any
+    public void estdTotalClients(View v){
         Intent intent = new Intent(Estadistiques.this, Estad_BarresClients.class);
         startActivity(intent);
     }
 
-    //Canvi a pantalla estadística total vendes
+
+    //Canvi a PANTALLA ESTADÍSTICA comparació de beneficis entre els dos géneres
     public void estdCompararSexes(View v){
         Intent intent = new Intent(Estadistiques.this, Estad_BarresCompararSexes.class);
         startActivity(intent);
     }
 
-    //Canvi a pantalla estadística total vendes
+
+    //Canvi a PANTALLA ESTADÍSTICA comparació diners any actual i anterior
     public void estdCompararDiners(View v){
         Intent intent = new Intent(Estadistiques.this, Estad_BarresCompararDiners.class);
         startActivity(intent);
     }
 
-    //Canvi a pantalla estadística total vendes
+
+    //Canvi a PANTALLA ESTADÍSTICA total vendes
     public void estdPastisTotalDiners(View v){
         Call<Perruquer> call = mTodoService.getIdPerruquer();
         call.enqueue(new Callback<Perruquer>() {
@@ -128,7 +125,7 @@ public class Estadistiques extends AppCompatActivity implements SingleChoiceDial
             public void onResponse(Call<Perruquer> call, Response<Perruquer> response) {
 
                 if (response.isSuccessful()) {
-                    if (response.body().getNomPerruquer().equals("fer")) {
+                    if (response.body().getNomPerruquer().equals("d")) {
                         Intent intent = new Intent(Estadistiques.this, Estad_PastisTotalDiners.class);
                         startActivity(intent);
                     }

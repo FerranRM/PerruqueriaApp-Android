@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#8BB6F5">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -36,7 +36,7 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/botoEstdTotalClients"
+        android:id="@+id/botoEstdLlistatClients"
         android:layout_width="700px"
         android:layout_height="180px"
         android:layout_centerHorizontal="false"
@@ -61,16 +61,16 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/botoEstdTotalSexes"
+        android:id="@+id/botoEstdTotalClients"
         android:layout_width="700px"
         android:layout_height="180px"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="280dp"
         android:background="@drawable/boto_efecte_blanc"
+        android:onClick="estdTotalClients"
         android:text="Número total de clientes\nen el último año"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:onClick="estdTotaClients"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/botoEstdCompDiners"
@@ -112,8 +112,8 @@
         android:id="@+id/fotoLlistatClients"
         android:layout_width="80px"
         android:layout_height="80px"
-        android:layout_alignTop="@id/botoEstdTotalClients"
-        android:layout_alignBottom="@id/botoEstdTotalClients"
+        android:layout_alignTop="@id/botoEstdLlistatClients"
+        android:layout_alignBottom="@id/botoEstdLlistatClients"
         android:layout_alignParentBottom="false"
         android:layout_marginLeft="20dp"
         app:srcCompat="@drawable/llistat_clients_fets" />
@@ -132,8 +132,8 @@
         android:id="@+id/fotoTotalClients"
         android:layout_width="80px"
         android:layout_height="80px"
-        android:layout_alignTop="@id/botoEstdTotalSexes"
-        android:layout_alignBottom="@id/botoEstdTotalSexes"
+        android:layout_alignTop="@id/botoEstdTotalClients"
+        android:layout_alignBottom="@id/botoEstdTotalClients"
         android:layout_alignParentBottom="false"
         android:layout_marginLeft="20dp"
         app:srcCompat="@drawable/totalclients" />
