@@ -1,9 +1,12 @@
 package org.udg.pds.todoandroid.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +27,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,11 +39,11 @@ public class Llistat_ClientsFets extends AppCompatActivity {
     private String[] llistatMesos = {"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
 
 
-    public ArrayList<Client> llistaClients;
-    private RecyclerView mRecyclerView;     //RecyclerView de la llista de clients fets
-    private AdaptadorLlistaClients mAdapter;   //Adaptador de clients fets
-    private RecyclerView.LayoutManager mLayoutManager;  //Layout manager del recyclerview
-    private Integer totalDiners = 0;    //Enter on guardem el total dels diners fets
+    public ArrayList<Client> llistaClients;             // Llistat on guardarem tots els clients fets
+    private RecyclerView mRecyclerView;                 // RecyclerView de la llista de clients fets
+    private AdaptadorLlistaClients mAdapter;            // Adaptador de clients fets
+    private RecyclerView.LayoutManager mLayoutManager;  // Layout manager del recyclerview
+    private Integer totalDiners = 0;                    // Enter on guardem el total dels diners fets
     
     
     //Crear barra menús
@@ -102,7 +106,9 @@ public class Llistat_ClientsFets extends AppCompatActivity {
 
 
     //Pre: mesAVisualitzar és un mes amb el format correcte
-    //Post: s'omple la llista llistaClients dels clients fets entre les dues dates d'entrada (dataIn, dataFi)
+    //Post: s'omple la llista llistaClients dels clients fets entre el primer dia del mes i el darrer.
+    //      També s'incrementa el totalDiners fets per cada un d'aquest clients.
+    //      Es mostra per pantalla el resultat amb el llistat de cada client atés i el total de diners fets.
     public void crearLlista(int mesAVisualitzar) {
         
         //Obtenim les dues dates del mes (Primer i darrer dia del mes)
@@ -157,10 +163,69 @@ public class Llistat_ClientsFets extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+        mAdapter.setOnItemClickListener(new AdaptadorLlistaClients.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+                AlertDialog.Builder alerta = new AlertDialog.Builder(Llistat_ClientsFets.this);
+                alerta.setMessage("Estàs seguro que quieres eliminar este cliente? Se perderàn todos los datos");
+                alerta.setCancelable(true);
+
+                alerta.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        esborrarClient(position);
+                    }
+                });
+                alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert11 = alerta.create();
+                alert11.setTitle("Eliminar cliente");
+                alert11.show();
+            }
+        });
     }
 
 
 
+    //Pre: posicio existeix a llistaReserves
+    //Post: s'elimina la reserva de la BD i, per tant, del llistat actual que es mostra per pantalla.
+    public void esborrarClient(int posicio) {
+       AlertDialog.Builder mBuilder = new AlertDialog.Builder(Llistat_ClientsFets.this);
+
+        Client clientEliminar = llistaClients.get(posicio);
+
+        Call<ResponseBody> call = mTodoService.deleteClient(clientEliminar.getId().toString());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    totalDiners -= llistaClients.get(posicio).getPreuTotal();
+                    llistaClients.remove(posicio);
+
+
+                    mAdapter.notifyDataSetChanged();    //Actualitzem canvis
+
+                    Toast toast = Toast.makeText(Llistat_ClientsFets.this, "Client eliminat", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(Llistat_ClientsFets.this, "Error al eliminar el client", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast toast = Toast.makeText(Llistat_ClientsFets.this, "Fallo: "+t.getMessage(), Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
+    }
 
 
 }

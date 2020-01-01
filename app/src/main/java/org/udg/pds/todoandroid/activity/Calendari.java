@@ -31,45 +31,6 @@ public class Calendari extends AppCompatActivity {
 
     TodoApi mTodoService;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activitat_calendari);
-
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
-
-
-        //Creació de la barra de navgeació dels 4 menús
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setSelectedItemId(R.id.navegacio_calendari);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
-        CalendarView calendari = findViewById(R.id.calendarView);
-        calendari.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Intent intentCanvi = new Intent(Calendari.this, ActivitatReserva.class);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, dayOfMonth);
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-                int[] dataAMostrar = new int[]{month, dayOfMonth, dayOfWeek, year};
-                intentCanvi.putExtra("dadesData",dataAMostrar);
-                startActivity(intentCanvi);
-            }
-        });
-
-        TextView dataActual = findViewById(R.id.textData);
-        dataActual.setText(dataActual());
-
-        totalReservesActuals();
-    }
-
-
-
-
     //Crear barra menús
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -101,7 +62,45 @@ public class Calendari extends AppCompatActivity {
     };
 
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activitat_calendari);
 
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
+
+
+        //Creació de la barra de navgeació dels 4 menús
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setSelectedItemId(R.id.navegacio_calendari);
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+        CalendarView calendari = findViewById(R.id.calendarView);
+        calendari.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                Intent intentCanvi = new Intent(Calendari.this, ActivitatReserva.class);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+                int[] dataAMostrar = new int[]{month, dayOfMonth, dayOfWeek, year};
+                intentCanvi.putExtra("dadesData",dataAMostrar);     //Guardem en un variable que pasarem en el canvi de pantalla les dades de la data a mostrar
+                startActivity(intentCanvi);
+            }
+        });
+
+        TextView dataActual = findViewById(R.id.textData);
+        dataActual.setText(dataActual());
+
+        totalReservesActuals();
+    }
+
+
+    //Pre: --
+    //Post: retorna la data actual amb el format: "- DIA de MES -"
     private String dataActual(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date currentTime = Calendar.getInstance().getTime();

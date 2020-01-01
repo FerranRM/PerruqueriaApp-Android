@@ -23,7 +23,6 @@ public class AdaptadorLlistaClients extends RecyclerView.Adapter<AdaptadorLlista
     public interface OnItemClickListener {
         void onItemClick(int position);
 
-        void onDeleteClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -44,6 +43,19 @@ public class AdaptadorLlistaClients extends RecyclerView.Adapter<AdaptadorLlista
             mTextView2 = itemView.findViewById(R.id.horaClient);
             mTextView3 = itemView.findViewById(R.id.dataClient);
             mTextViewDiners = itemView.findViewById(R.id.dinersTotals);
+
+            //Eliminar client
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 

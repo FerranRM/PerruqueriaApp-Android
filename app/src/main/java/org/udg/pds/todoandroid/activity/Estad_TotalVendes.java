@@ -73,14 +73,14 @@ public class Estad_TotalVendes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estad_total_vendes);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Total productos vendidos");
+        titol.setText("Total productos vendidos");  //Afegim el títol de l'estadística
 
         ferGrafic();
     }
@@ -109,7 +109,7 @@ public class Estad_TotalVendes extends AppCompatActivity {
     }
 
 
-    //Pre: clients no és buid
+    //Pre: clients no és buit
     //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
     public void tractarDades(Collection<Producte> productes) {

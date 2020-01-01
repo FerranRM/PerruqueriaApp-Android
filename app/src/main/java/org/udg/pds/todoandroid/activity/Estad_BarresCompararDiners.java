@@ -2,13 +2,13 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -20,6 +20,7 @@ import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
@@ -30,7 +31,6 @@ import org.udg.pds.todoandroid.rest.TodoApi;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -42,7 +42,6 @@ import retrofit2.Response;
 public class Estad_BarresCompararDiners extends AppCompatActivity {
 
     TodoApi mTodoService;
-    public ArrayList<Client> llistaClients2;
 
     Integer anyActual;
     Integer mesInicial;
@@ -84,23 +83,23 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estad_total_vendes);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Comparar total dinero\nentre los dos últimos años");
+        titol.setText("Comparar total dinero\nentre los dos últimos años"); //Afegim el títol de l'estadística
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
     }
 
 
-    //Pre: Les dues dates d'entrada són correctes
-    //Post: fa la crida als clients que es troben entre la data d'avui i la del gener de l'any anterior i mostra els gràfics a partir d'aquests
+    //Pre: --
+    //Post: fa la crida als clients fets durant el darrer any i l'anterior i calcula el total de diners fets per cada mes.
+    //      Després mostra la comparació entre els dos períodes per pantalla en forma de gràfic.
     public void ferGrafic(){
-        llistaClients2 = new ArrayList<>();
 
         //Calendar data2 = new GregorianCalendar(2020, 00, 30);
         Calendar data2 = GregorianCalendar.getInstance();
@@ -108,7 +107,7 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         anyActual = data2.get(Calendar.YEAR)-2;
         mesInicial = data2.get(Calendar.MONTH)+1;
 
-        if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+        if (mesInicial>11) {    //Si estem al Desembre només haurem d'agafar dades del Gener al Desembre del mateix any
             anyActual++;
             mesInicial = 00;
         }
@@ -140,9 +139,9 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
     }
 
 
-    //Pre: clients no és buid
-    //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
-    //      Després crea el gràfic a partir d'aquesta llista de dades.
+    //Pre: clients no és buit
+    //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos per cada etapa.
+    //      Després crea el gràfic de comparació a partir d'aquestes dues llistes de dades.
     public void tractarDades(List<Client> clients) {
 
         List<DataEntry> dataPasado = new ArrayList<>();
@@ -184,8 +183,9 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         dibuixarGrafic(dataPasado,dataActual);
     }
 
-    //Pre: data no és buida
-    //Post: mostra el gràfic de barres a partir de la llista data d'entrada.
+
+    //Pre: les dues llistes no són buides
+    //Post: mostra el gràfic de barres de comparació de diners fets el darrer any i l'anterior a partir de les dues llistes de dades entrades
     public void dibuixarGrafic(List<DataEntry> dadesAnyPassat, List<DataEntry> dadesAnyActual) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         Cartesian cartesian = AnyChart.column();
@@ -225,13 +225,15 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
         cartesian.credits().text("David Tellez");
-        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");   //Icona dels crèdits del gràfic
         cartesian.background().fill("#FFFFFF");
 
         anyChartView.setChart(cartesian);
         anyChartView.setLicenceKey("ferryjack2@gmail.com-49753d4b-a9936015");
     }
 
+    //Pre: data és una data correcta
+    //Post: retorna el mes en castellà de la data entrada per paràmetres
     public String obtenirNomMes(Date data) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String mes  = (String) DateFormat.format("MM",  data);

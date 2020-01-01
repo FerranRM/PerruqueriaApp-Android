@@ -2,36 +2,32 @@ package org.udg.pds.todoandroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.chart.common.listener.Event;
-import com.anychart.chart.common.listener.ListenersInterface;
 import com.anychart.charts.Pie;
 import com.anychart.enums.Align;
 import com.anychart.enums.LegendLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.Nullable;
 import org.udg.pds.todoandroid.R;
 import org.udg.pds.todoandroid.TodoApp;
 import org.udg.pds.todoandroid.entity.Client;
 import org.udg.pds.todoandroid.entity.Perruquer;
-import org.udg.pds.todoandroid.entity.Producte;
 import org.udg.pds.todoandroid.rest.TodoApi;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -80,7 +76,7 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estad_total_vendes);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
@@ -115,13 +111,13 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
 
 
 
-    //Pre: perruquers no és buid
-    //Post: agafa la col·lecció de perruquers i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
-    //      Després crea el gràfic a partir d'aquesta llista de dades.
+    //Pre: llistat perruquers no és buit
+    //Post: agafa el llistat de perruquers i calcula el total de diners fets per cada un.
+    //      Després mostra el gràfic de pastís amb els resultats.
     private void tractarDades(List<Perruquer> perruquers) {
 
-        List<String> llistatNomPerruquers = new ArrayList<>();
-        List<Integer> llistatTotalVendes = new ArrayList<>();
+        List<String> llistatNomPerruquers = new ArrayList<>();  //Llistat on guardarem tots els noms dels perruquers
+        List<Integer> llistatTotalVendes = new ArrayList<>();   //Llistat on guardarem tots els totals de diners fets per cada perruquer
 
         TextView titol = findViewById(R.id.titolCalendariDia);
 
@@ -131,18 +127,19 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
             int anyInicial = data2.get(Calendar.YEAR)-1;
             int mesInicial = data2.get(Calendar.MONTH)+1;
 
-            if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+            if (mesInicial>11) {    //Si estem al Desembre només haurem d'agafar dades del Gener al Desembre del mateix any
                 anyInicial++;
                 mesInicial = 00;
             }
 
-            Date data1 = new GregorianCalendar(anyInicial, mesInicial, 01).getTime();
-            Date data2F = data2.getTime();
+            Date dataInicial = new GregorianCalendar(anyInicial, mesInicial, 01).getTime();
+            Date dataFinal = data2.getTime();
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
-            String sData1 = format.format(data1);
-            String sData2 = format.format(data2F);
+            String sData1 = format.format(dataInicial);
+            String sData2 = format.format(dataFinal);
 
+            //Afegim el títol de l'estadística
             titol.setText("Total dinero de cada peluquero\n01/"+(mesInicial+1)+"/"+anyInicial +" - "+ data2.get(Calendar.DAY_OF_MONTH)+"/"+(data2.get(Calendar.MONTH)+1)+"/"+data2.get(Calendar.YEAR));
 
             Call<List<Client>> call = mTodoService.listAllClients(sData1,sData2, auxPerruquer.getId());
@@ -179,13 +176,11 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
 
 
     //Pre: ambdues llistes no són buides
-    //Post: mostra el gràfic pastís del total de cada producte venut i també el tant per cent corresponent entre tots els productes venuts.
+    //Post: mostra el gràfic pastís del total de diners fets per cada perruquer.
     public void dibuixarGrafic(List<String> llistatNomPerruquers, List<Integer> llistatTotalVendes) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
 
         Pie pie = AnyChart.pie();
-
-
 
         List<DataEntry> data = new ArrayList<>();
         for(int i = 0; i<llistatNomPerruquers.size(); i++){
@@ -206,16 +201,13 @@ public class Estad_PastisTotalDiners extends AppCompatActivity {
         pie.tooltip()
                 .format("{%Value} € ");
 
-
-
-
         pie.legend()
                 .position("center-bottom")
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
 
         pie.credits().text("David Tellez");
-        pie.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        pie.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");     //Icona dels crèdits del gràfic
         pie.background().fill("#FFFFFF");
 
         anyChartView.setChart(pie);

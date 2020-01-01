@@ -39,8 +39,6 @@ public class Ajustos extends AppCompatActivity {
 
     TodoApi mTodoService;
 
-    public ArrayList<org.udg.pds.todoandroid.entity.Producte> llistaProductes;
-
     int[] imatges = {R.drawable.noi, R.drawable.noi1, R.drawable.noia, R.drawable.noia1, R.drawable.noia2, R.drawable.noia3};
 
 
@@ -75,8 +73,6 @@ public class Ajustos extends AppCompatActivity {
     };
 
 
-    //Pre:
-    //Post:
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +101,6 @@ public class Ajustos extends AppCompatActivity {
         call.enqueue(new Callback<Perruquer>() {
             @Override
             public void onResponse(Call<Perruquer> call, Response<Perruquer> response) {
-
                 if (response.isSuccessful()) {
                     nomPerruquer.setText(response.body().getNomUsuari());
                 } else {
@@ -113,7 +108,6 @@ public class Ajustos extends AppCompatActivity {
                     toast.show();
                 }
             }
-
             @Override
             public void onFailure(Call<Perruquer> call, Throwable t) {
                 Toast toast = Toast.makeText(Ajustos.this, "Error accediendo al ID de usuario ", Toast.LENGTH_SHORT);
@@ -121,6 +115,7 @@ public class Ajustos extends AppCompatActivity {
             }
         });
     }
+
 
     //Pre: --
     //Post: modifica la imatge de perfil aleatoriament entre unes imatges ja predefinides
@@ -132,7 +127,7 @@ public class Ajustos extends AppCompatActivity {
 
 
     //Pre: --
-    //Post:
+    //Post: afegeix un nou producte, després d'introduir el preu i descripció que li volem donar.
     public void afegirProducte(View view) {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(Ajustos.this);
@@ -177,7 +172,7 @@ public class Ajustos extends AppCompatActivity {
 
                 .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        //Cancel·lar no fa res
                     }
                 });
 
@@ -187,8 +182,8 @@ public class Ajustos extends AppCompatActivity {
 
 
 
-    //Pre:
-    //Post:
+    //Pre: hi ha productes a eliminar
+    //Post: ens mostra el llistat de productes que tenim actualment i, després d'escollir un o varis, els elimina de la base de dades.
     public void eliminarProducte(View view) {
         List<Producte> llistaProductes = new ArrayList<>();
 
@@ -216,8 +211,8 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
-    //Pre:
-    //Post:
+    //Pre: --
+    //Post: afegeix un nou servei, després d'introduir el preu i nom que li volem donar.
     public void afegirServei(View view) {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(Ajustos.this);
@@ -262,7 +257,7 @@ public class Ajustos extends AppCompatActivity {
 
                 .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        //Cancel·lar no fa res
                     }
                 });
 
@@ -271,8 +266,8 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
-    //Pre:
-    //Post:
+    //Pre: ha de tenir la sessió oberta
+    //Post: es tanca la sessió actual i es redirigeix a la pantalla de login.
     public void tancarSessioPerruquer(View view){
         TodoApi todoApi = ((TodoApp) this.getApplication()).getAPI();
         Call<String> call = todoApi.logout();
@@ -298,15 +293,15 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
-    //Pre:
-    //Post:
+    //Pre: --
+    //Post: redirigeix a l'Instagram de la perruqueria
     public void instagramPerruqueria(View view) {
         Intent instagramIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/ferranfrm/?hl=es"));
         startActivity(instagramIntent);
     }
 
 
-    //Pre:
+    //Pre: llistaProductes no és buid
     //Post: es mostra un llistat de tots els productes actuals. Cada producte es pot checkquejar/seleccionar per després eliminar-lo.
     public void llistarProductesEliminar(List<Producte> llistaProductes) {
         ArrayList<Integer> mUserItems = new ArrayList<>();
@@ -392,6 +387,8 @@ public class Ajustos extends AppCompatActivity {
     }
 
 
+    //Pre: hi ha serveis a eliminar
+    //Post: ens mostra el llistat de serveis que tenim actualment i, després d'escollir un o varis, els elimina de la base de dades.
     public void eliminarServei(View view) {
         List<ServeiPrestat> llistaServeis = new ArrayList<>();
 
@@ -418,8 +415,8 @@ public class Ajustos extends AppCompatActivity {
         });
     }
 
-    //Pre:
-    //Post: es mostra un llistat de tots els serveis a prestar actuals. Cada servei es pot checkquejar/seleccionar per després eliminar-lo.
+    //Pre: llistaServeis no és buida.
+    //Post: es mostra un llistat de tots els serveis actuals. Cada servei es pot checkquejar/seleccionar per després eliminar-lo.
     public void llistarServeisEliminar(List<ServeiPrestat> llistaServeis) {
         ArrayList<Integer> mUserItems = new ArrayList<>();
         boolean[] checkedItems = new boolean[llistaServeis.size()];

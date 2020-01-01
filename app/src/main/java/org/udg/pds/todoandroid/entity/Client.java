@@ -6,21 +6,28 @@ import java.util.Date;
 
 public class Client {
 
+    public Long id;
     public String nomClient;
     public Integer preuTotal;
     public Boolean sexeClient;  // 0/False = Dona, 1/True = Home
-    public Integer pentinatClient;
     public Date dataClient;
 
 
     public Client(){}
 
-    public Client(Date dataC, Integer pentinatC, Boolean sexeC, String nomC, Integer preuTotal){
+    public Client(Date dataC, Boolean sexeC, String nomC, Integer preuTotal){
         this.nomClient = nomC;
         this.preuTotal = preuTotal;
         this.sexeClient = sexeC;
-        this.pentinatClient = pentinatC;
         this.dataClient = dataC;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getNomClient(){
@@ -40,8 +47,6 @@ public class Client {
     }
 
     public Boolean getSexeClient(){ return sexeClient; }
-
-    public Integer getPentinatClient(){ return pentinatClient; }
 
     public Date getDataClient(){ return dataClient; }
 

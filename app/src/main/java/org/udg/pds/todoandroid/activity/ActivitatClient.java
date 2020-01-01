@@ -115,15 +115,11 @@ public class ActivitatClient extends AppCompatActivity {
         String clientFet = comprovarSexe();
         if (clientFet=="!") mostrarAlerta("Por favor, introduce el género del cliente");
         else {
-            clientFet += "1/";
-
             EditText nomClient = (EditText) findViewById(R.id.nomClient);
             String aux = nomClient.getText().toString();
             if (aux.isEmpty()) mostrarAlerta("Por favor, introduce el nombre del cliente");
             else {
                 clientFet += aux + "/";
-                aux = productes();
-                clientFet += aux+"/"+preuTotal.toString();
 
                 if (preuTotal!=0) guardarClientBD(clientFet);
                 else mostrarAlerta("Por favor, selecciona un servicio y/o producto");
@@ -142,23 +138,6 @@ public class ActivitatClient extends AppCompatActivity {
         else return "!";
     }
 
-    //Pre: --
-    //Post: Retorna un string amb el número identificatiu del tipus de tall seleccionat, si no hi ha cap seleccionat retorna !.
-    public String comprovarTall(){
-        return "1/";
-    }
-
-    //Pre: --
-    //Post: retorna un string de llista de tots els productes que estàn seleccionats separats per una coma entre ells.
-    //      En cas de que no hi hagui cap seleccionat retorna un string buit: "".
-    public String productes(){
-        String llistatProd="";
-        for (int i = 0; i<mUserProductes.size(); i++){
-            llistatProd = llistatProd + llistaProductes.get(mUserProductes.get(i)).getDescripcioProducte();
-            if (i< mUserProductes.size()-1) llistatProd += ",";
-        }
-        return llistatProd;
-    }
 
     //Pre: nomAlerta ha de ser un missatge d'alerta identificatiu de l'error.
     //Post: mostra per pantalla l'alerta amb el titol: ERROR i el missatge entrat per paràmetre.
@@ -400,8 +379,7 @@ public class ActivitatClient extends AppCompatActivity {
         String[] cadenaVariables = cadena.split("/");
 
         c1.sexeClient = Boolean.valueOf(cadenaVariables[0]);
-        c1.pentinatClient = Integer.valueOf(cadenaVariables[1]);
-        c1.nomClient = cadenaVariables[2];
+        c1.nomClient = cadenaVariables[1];
         c1.preuTotal = preuTotal;
         c1.dataClient = new Date();
 

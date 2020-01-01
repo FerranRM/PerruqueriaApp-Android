@@ -35,7 +35,7 @@
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="3"
-        android:text="Comparar total dinero\naño pasado y actual"
+        android:text="Títol estadística"
         android:textAlignment="center"
         android:textColor="#6EA1EC"
         android:textSize="26sp"

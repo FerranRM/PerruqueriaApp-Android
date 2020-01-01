@@ -30,10 +30,10 @@ public class AdaptadorLlistaDies extends RecyclerView.Adapter<AdaptadorLlistaDie
     }
 
     public static class ViewHolderDades extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
-        public TextView mTextView1;
-        public TextView mTextView2;
-        public ImageView mDeleteImage;
+        public ImageView mImageView;    // Recuadre on hi han les altres dades
+        public TextView mTextView1;     // Nom del client
+        public TextView mTextView2;     // Hora a la que s'ha atés al client
+        public ImageView mDeleteImage;  // Imatge d'esborrar
 
         public ViewHolderDades(View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -42,6 +42,7 @@ public class AdaptadorLlistaDies extends RecyclerView.Adapter<AdaptadorLlistaDie
             mTextView2 = itemView.findViewById(R.id.horaClient);
             mDeleteImage = itemView.findViewById(R.id.imatgeBorrar);
 
+            //Modificar reserva
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -54,6 +55,7 @@ public class AdaptadorLlistaDies extends RecyclerView.Adapter<AdaptadorLlistaDie
                 }
             });
 
+            //Eliminar reserva
             mDeleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -72,12 +74,14 @@ public class AdaptadorLlistaDies extends RecyclerView.Adapter<AdaptadorLlistaDie
         llistaReserves = exampleList;
     }
 
+
     @Override
     public ViewHolderDades onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.llistat_clients_dia, parent, false);
         ViewHolderDades evh = new ViewHolderDades(v, mListener);
         return evh;
     }
+
 
     @Override
     public void onBindViewHolder(ViewHolderDades holder, int position) {

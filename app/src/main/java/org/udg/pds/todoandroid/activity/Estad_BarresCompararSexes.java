@@ -83,21 +83,22 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estad_total_vendes);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Total dinero mensual por sexos");
+        titol.setText("Total dinero mensual por sexos");    //Afegim el títol de l'estadística
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
     }
 
 
-    //Pre: Les dues dates d'entrada són correctes
-    //Post: fa la crida als clients que es troben entre les dues dates entrades per paràmetre i mostra els gràfics a partir d'aquests
+    //Pre: --
+    //Post: agafa el llistat dels clients fets durant el darrer any i calcula el total de diners fets per cada mes segons el gènere.
+    //      Després mostra el resultat per pantalla en forma de gràfic.
     public void ferGrafic(){
         llistaClients2 = new ArrayList<>();
 
@@ -107,7 +108,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         int anyInicial = data2.get(Calendar.YEAR)-1;
         int mesInicial = data2.get(Calendar.MONTH)+1;
 
-        if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+        if (mesInicial>11) {    //Si estem al Desembre només haurem d'agafar dades del Gener al Desembre del mateix any
             anyInicial++;
             mesInicial = 00;
         }
@@ -139,8 +140,8 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
     }
 
 
-    //Pre: clients no és buid
-    //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
+    //Pre: clients no és buit, anyAnterior és un any amb format correcte
+    //Post: agafa la col·lecció de clients i els ajunta per mesos i gènere comptant el total de diners fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
     public void tractarDades(Collection<Client> clients, int anyAnterior) {
         List<DataEntry> dataHomes = new ArrayList<>();
@@ -160,7 +161,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
             String numeroMes = (String) DateFormat.format("MM", auxClient.getDataClient());
 
             if (auxClient.getSexeClient()){ //És Home
-                if (mesH==null){ //El primer client (inicialitzem les dues variables)
+                if (mesH==null){ //El primer client home (inicialitzem les variables de mesH i mesInicial (si és null)))
                     mesH = obtenirNomMes(auxClient.getDataClient());
                     if (mesInicial==null) {
                         mesInicial = mesH;
@@ -172,14 +173,14 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
                     dataHomes.add(new ValueDataEntry(mesH+" "+anyHomes, totalH));
                     mesH = obtenirNomMes(auxClient.getDataClient());
                     totalH = auxClient.getPreuTotal();
-                    if (mesH.equals("ENERO")) {
+                    if (mesH.equals("enero")) {
                         anyHomes++;
                     }
                 }
                 else totalH += auxClient.getPreuTotal();
             }
             else{
-                if (mesD==null){ //El primer client (inicialitzem les dues variables)
+                if (mesD==null){ //La primera clienta dóna (inicialitzem les variables de mesD i mesInicial (si és null))
                     mesD = obtenirNomMes(auxClient.getDataClient());
                     if (mesInicial==null) {
                         mesInicial = mesD;
@@ -191,7 +192,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
                     dataDones.add(new ValueDataEntry(mesD+" "+anyDones, totalD));
                     mesD = obtenirNomMes(auxClient.getDataClient());
                     totalD = auxClient.getPreuTotal();
-                    if (mesD.equals("ENERO")) {
+                    if (mesD.equals("enero")) {
                         anyDones++;
                     }
                 }
@@ -206,7 +207,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
     }
 
     //Pre: dataHomes i dataDones no són buides
-    //Post: mostra el gràfic de doble barra a partir de les dues llistes de data d'entrada.
+    //Post: es mostra el gràfic de doble barra que compara els diners obtinguts en clients per gènere a partir de les dues llistes de dades d'entrada
     public void dibuixarGrafic(List<DataEntry> dataHomes, List<DataEntry> dataDones) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         Cartesian cartesian = AnyChart.column();
@@ -246,7 +247,7 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
         cartesian.credits().text("David Tellez");
-        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");   //Icona dels crèdits del gràfic
         cartesian.background().fill("#FFFFFF");
 
         anyChartView.setChart(cartesian);
@@ -254,22 +255,24 @@ public class Estad_BarresCompararSexes extends AppCompatActivity {
     }
 
 
+    //Pre: data és una data correcta
+    //Post: retorna el mes en castellà de la data entrada per paràmetres
     public String obtenirNomMes(Date data) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String mes  = (String) DateFormat.format("MM",  data);
 
-        if (mes.equals("01")) return "ENERO";
-        else if (mes.equals("02")) return "FEBRERO";
-        else if (mes.equals("03")) return "MARZO";
-        else if (mes.equals("04")) return "ABRIL";
-        else if (mes.equals("05")) return "MAYO";
-        else if (mes.equals("06")) return "JUNIO";
-        else if (mes.equals("07")) return "JULIO";
-        else if (mes.equals("08")) return "AGOSTO";
-        else if (mes.equals("09")) return "SETIEMBRE";
-        else if (mes.equals("10")) return "OCTUBRE";
-        else if (mes.equals("11")) return "NOVIEMBRE";
-        else return "DICIEMBRE";
+        if (mes.equals("01")) return "enero";
+        else if (mes.equals("02")) return "febrero";
+        else if (mes.equals("03")) return "marzo";
+        else if (mes.equals("04")) return "abril";
+        else if (mes.equals("05")) return "mayo";
+        else if (mes.equals("06")) return "junio";
+        else if (mes.equals("07")) return "julio";
+        else if (mes.equals("08")) return "agosto";
+        else if (mes.equals("09")) return "septiembre";
+        else if (mes.equals("10")) return "octubre";
+        else if (mes.equals("11")) return "noviembre";
+        else return "diciembre";
     }
 }
 

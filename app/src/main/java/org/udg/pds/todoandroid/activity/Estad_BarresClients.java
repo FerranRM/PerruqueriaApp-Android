@@ -84,22 +84,23 @@ public class Estad_BarresClients extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estad_total_vendes);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Total clientes último año");
+        titol.setText("Total clientes último año"); //Afegim el títol de l'estadística
 
 
         ferGrafic();	//Omplim la llista amb les dades corresponents
     }
 
 
-    //Pre: Les dues dates d'entrada són correctes
-    //Post: fa la crida als clients que es troben entre les dues dates entrades per paràmetre i mostra els gràfics a partir d'aquests
+    //Pre: --
+    //Post: fa la crida als clients fets durant el darrer any i l'anterior i calcula el total per a cada mes a partir d'aquests.
+    //      Després mostra el resultat per pantalla en forma de gràfic.
     public void ferGrafic(){
         llistaClients2 = new ArrayList<>();
 
@@ -130,7 +131,7 @@ public class Estad_BarresClients extends AppCompatActivity {
     }
 
 
-    //Pre: clients no és buid
+    //Pre: clients no és buit
     //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de clients fets en cada un d'aquests mesos.
     //      Després crea el gràfic a partir d'aquesta llista de dades.
     public void tractarDades(Collection<Client> clients, int anyAnterior) {
@@ -159,7 +160,7 @@ public class Estad_BarresClients extends AppCompatActivity {
     }
 
     //Pre: data no és buida
-    //Post: mostra el gràfic de barres a partir de la llista data d'entrada.
+    //Post: mostra el gràfic de barres del total de clients fets el darrer any per cada mes a partir de la llista de dades d'entrada.
     public void dibuixarGrafic(List<DataEntry> data) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         Cartesian cartesian = AnyChart.column();
@@ -185,7 +186,7 @@ public class Estad_BarresClients extends AppCompatActivity {
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
         cartesian.credits().text("David Tellez");
-        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");   //Icona dels crèdits del gràfic
         cartesian.background().fill("#FFFFFF");
 
         anyChartView.setChart(cartesian);
@@ -193,39 +194,24 @@ public class Estad_BarresClients extends AppCompatActivity {
     }
 
 
-    //Pre: --
-    //Post: retorna una data amb el mes actual, un any menys i dia 1
-    public Date obtenirDataInicial() throws ParseException {
-        SimpleDateFormat dInicial =  new SimpleDateFormat("dd/MM/yyyy");
-        Date auxData = new Date(); //Obtenim la data actual
-
-        //PODEM TRACTAR AQUEST AUX PER OBTENIR MES, ANY ..?
-        Calendar c = Calendar.getInstance();
-        //int day = c.get(Calendar.DAY_OF_MONTH);
-        int mes = c.get(Calendar.MONTH);
-        int any = c.get(Calendar.YEAR);
-
-        auxData  = dInicial.parse("01/"+mes+"/"+any);	//Canviem el valor de la data
-        return auxData;
-    }
-
-
+    //Pre: data és una data correcta
+    //Post: retorna el mes en castellà de la data entrada per paràmetres
     public String obtenirNomMes(Date data) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String mes  = (String) DateFormat.format("MM",  data);
 
-        if (mes.equals("01")) return "ENERO";
-        else if (mes.equals("02")) return "FEBRERO";
-        else if (mes.equals("03")) return "MARZO";
-        else if (mes.equals("04")) return "ABRIL";
-        else if (mes.equals("05")) return "MAYO";
-        else if (mes.equals("06")) return "JUNIO";
-        else if (mes.equals("07")) return "JULIO";
-        else if (mes.equals("08")) return "AGOSTO";
-        else if (mes.equals("09")) return "SETIEMBRE";
-        else if (mes.equals("10")) return "OCTUBRE";
-        else if (mes.equals("11")) return "NOVIEMBRE";
-        else return "DICIEMBRE";
+        if (mes.equals("01")) return "enero";
+        else if (mes.equals("02")) return "febrero";
+        else if (mes.equals("03")) return "marzo";
+        else if (mes.equals("04")) return "abril";
+        else if (mes.equals("05")) return "mayo";
+        else if (mes.equals("06")) return "junio";
+        else if (mes.equals("07")) return "julio";
+        else if (mes.equals("08")) return "agosto";
+        else if (mes.equals("09")) return "septiembre";
+        else if (mes.equals("10")) return "octubre";
+        else if (mes.equals("11")) return "noviembre";
+        else return "diciembre";
     }
 }
 

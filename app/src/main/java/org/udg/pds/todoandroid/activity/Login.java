@@ -16,16 +16,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created with IntelliJ IDEA.
- * Perruquer: imartin
- * Date: 28/03/13
- * Time: 16:01
- * To change this template use File | Settings | File Templates.
- */
 
-// This is the Login fragment where the user enters the username and password and
-// then a RESTResponder_RF is called to check the authentication
+
+// Aquest és el fragment d’accés on l’usuari introdueix el nom d’usuari i la contrasenya i
+// a continuació, es truca a un RESTResponder_RF per comprovar l'autenticació
 public class Login extends AppCompatActivity {
 
     TodoApi mTodoService;
@@ -38,13 +32,10 @@ public class Login extends AppCompatActivity {
         mTodoService = ((TodoApp)this.getApplication()).getAPI();
 
         Button b = (Button)findViewById(R.id.login_button);
-        // This is teh listener that will be used when the user presses the "Login" button
+        // Aquest és l’oient que s’utilitzarà quan l’usuari premi el botó “Iniciar sessión”
+
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                /*Intent entrarApp = new Intent(Login.this, ActivitatClient.class);
-                startActivity(entrarApp);*/
-
                 EditText u = (EditText) Login.this.findViewById(R.id.login_username);
                 EditText p = (EditText) Login.this.findViewById(R.id.login_password);
                 Login.this.checkCredentials(u.getText().toString(), p.getText().toString());
@@ -52,7 +43,9 @@ public class Login extends AppCompatActivity {
         });
 
     }
-    // This method is called when the "Login" button is pressed in the Login fragment
+
+
+    // Aquest mètode es crida quan es prem el botó "Iniciar sessión" al fragment d'inici de sessió
     public void checkCredentials(String nomPerruquer, String contrasenya) {
         UserLogin ul = new UserLogin();
         ul.nomPerruquer = nomPerruquer;
@@ -66,15 +59,14 @@ public class Login extends AppCompatActivity {
                     Login.this.startActivity(new Intent(Login.this, ActivitatClient.class));
                     Login.this.finish();
                 } else {
-
-                    Toast toast = Toast.makeText(Login.this, "Error en el login "+response.raw(), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Login.this, "Error en el inicio de sessión", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
 
             @Override
             public void onFailure(Call<Perruquer> call, Throwable t) {
-                Toast toast = Toast.makeText(Login.this, "Error logging in 2", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Login.this, "Fallo en el inicio de sessión", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

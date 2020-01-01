@@ -45,7 +45,6 @@ public class Estad_BarresDiners extends AppCompatActivity {
     TodoApi mTodoService;
 
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -82,16 +81,16 @@ public class Estad_BarresDiners extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estad_total_vendes);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TextView titol = findViewById(R.id.titolCalendariDia);
-        titol.setText("Total dinero último año");
+        titol.setText("Total dinero último año");   //Afegim el títol de l'estadística
 
-        ferGrafic();	//Omplim la llista amb les dades corresponents
+        ferGrafic();
     }
 
 
@@ -105,7 +104,7 @@ public class Estad_BarresDiners extends AppCompatActivity {
         int anyInicial = data2.get(Calendar.YEAR)-1;
         int mesInicial = data2.get(Calendar.MONTH)+1;
 
-        if (mesInicial>11) {    //Només haurem d'agafar dades del Gener al Decembre del mateix any
+        if (mesInicial>11) {    //Si estem al Desembre només haurem d'agafar dades del Gener al Desembre del mateix any
             anyInicial++;
             mesInicial = 00;
         }
@@ -136,21 +135,22 @@ public class Estad_BarresDiners extends AppCompatActivity {
     }
 
 
-    //Pre: clients no és buid
+    //Pre: clients no és buid, anyAnterior té el format correcte d'un any
     //Post: agafa la col·lecció de clients i els ajunta per mesos comptant el total de diners fets en cada un d'aquests mesos.
-    //      Després crea el gràfic a partir d'aquesta llista de dades.
+    //      Després crea el gràfic a partir d'aquest llistat de dades.
     public void tractarDades(Collection<Client> clients, int anyAnterior) {
-        List<DataEntry> data = new ArrayList<>();
+        List<DataEntry> data = new ArrayList<>();   //Llistat on guardarem la data i el total fets
         Integer total = 0;
         String mes = null;
         String mesInicial = null;
+
         for(Client auxClient : clients){
             if (mes==null){ //El primer client (inicialitzem les dues variables)
                 mes = obtenirNomMes(auxClient.getDataClient());
                 mesInicial = mes;
                 total += auxClient.getPreuTotal();
             }
-            else if (!obtenirNomMes(auxClient.getDataClient()).equals(mes)){    //Si el mes del client auxClient és diferent al de anterior
+            else if (!obtenirNomMes(auxClient.getDataClient()).equals(mes)){    //Si el mes del client auxClient és diferent al de an8terior
                 data.add(new ValueDataEntry(mes+" "+anyAnterior, total));
                 mes = obtenirNomMes(auxClient.getDataClient());
                 total = auxClient.getPreuTotal();
@@ -165,7 +165,7 @@ public class Estad_BarresDiners extends AppCompatActivity {
     }
 
     //Pre: data no és buida
-    //Post: mostra el gràfic de barres a partir de la llista data d'entrada.
+    //Post: mostra el gràfic de barres del total de diners fets durant el darrer any a partir del llistat de dades d'entrada.
     public void dibuixarGrafic(List<DataEntry> data) {
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         Cartesian cartesian = AnyChart.column();
@@ -191,51 +191,32 @@ public class Estad_BarresDiners extends AppCompatActivity {
         cartesian.xAxis(0).title("Mes");
         cartesian.yAxis(0).title("Total dinero");
         cartesian.credits().text("David Tellez");
-        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");
+        cartesian.credits().logoSrc("https://image.flaticon.com/icons/png/512/2303/2303279.png");   //Icona dels crèdits del gràfic
         cartesian.background().fill("#FFFFFF");
-        /*cartesian.background().fill({
-            keys: ["#FFF","#66F", "#FFF"],
-            angle: 90,
-        });*/
 
         anyChartView.setChart(cartesian);
         anyChartView.setLicenceKey("ferryjack2@gmail.com-49753d4b-a9936015");
     }
 
 
-    //Pre: --
-    //Post: retorna una data amb el mes actual, un any menys i dia 1
-    public Date obtenirDataInicial() throws ParseException {
-        SimpleDateFormat dInicial =  new SimpleDateFormat("dd/MM/yyyy");
-        Date auxData = new Date(); //Obtenim la data actual
-
-        //PODEM TRACTAR AQUEST AUX PER OBTENIR MES, ANY ..?
-        Calendar c = Calendar.getInstance();
-        //int day = c.get(Calendar.DAY_OF_MONTH);
-        int mes = c.get(Calendar.MONTH);
-        int any = c.get(Calendar.YEAR);
-
-        auxData  = dInicial.parse("01/"+mes+"/"+any);	//Canviem el valor de la data
-        return auxData;
-    }
-
-
+    //Pre: data és una data correcta
+    //Post: retorna el mes en castellà de la data entrada per paràmetres
     public String obtenirNomMes(Date data) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String mes  = (String) DateFormat.format("MM",  data);
 
-        if (mes.equals("01")) return "ENERO";
-        else if (mes.equals("02")) return "FEBRERO";
-        else if (mes.equals("03")) return "MARZO";
-        else if (mes.equals("04")) return "ABRIL";
-        else if (mes.equals("05")) return "MAYO";
-        else if (mes.equals("06")) return "JUNIO";
-        else if (mes.equals("07")) return "JULIO";
-        else if (mes.equals("08")) return "AGOSTO";
-        else if (mes.equals("09")) return "SETIEMBRE";
-        else if (mes.equals("10")) return "OCTUBRE";
-        else if (mes.equals("11")) return "NOVIEMBRE";
-        else return "DICIEMBRE";
+        if (mes.equals("01")) return "enero";
+        else if (mes.equals("02")) return "febrero";
+        else if (mes.equals("03")) return "marzo";
+        else if (mes.equals("04")) return "abril";
+        else if (mes.equals("05")) return "mayo";
+        else if (mes.equals("06")) return "junio";
+        else if (mes.equals("07")) return "julio";
+        else if (mes.equals("08")) return "agosto";
+        else if (mes.equals("09")) return "septiembre";
+        else if (mes.equals("10")) return "octubre";
+        else if (mes.equals("11")) return "noviembre";
+        else return "diciembre";
     }
 }
 

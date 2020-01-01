@@ -59,7 +59,7 @@ public class Estadistiques extends AppCompatActivity implements SingleChoiceDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitat_estadistiques);
 
-        mTodoService = ((TodoApp)this.getApplication()).getAPI();
+        mTodoService = ((TodoApp)this.getApplication()).getAPI();   //Ens connectem a la BD
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.navegacio_estadistiques);
@@ -84,7 +84,7 @@ public class Estadistiques extends AppCompatActivity implements SingleChoiceDial
 
     @Override
     public void onNegativeButtonClicked() {
-
+        //Botó cancel·lar no fa res
     }
 
 
@@ -117,7 +117,8 @@ public class Estadistiques extends AppCompatActivity implements SingleChoiceDial
     }
 
 
-    //Canvi a PANTALLA ESTADÍSTICA total vendes
+    //Canvi a PANTALLA ESTADÍSTICA total diners fets per cada perruquer
+    //Aquesta estadística només pot ser consultada per el cap de la perruqueria, altrament es mostrarà un missatge per pantalla.
     public void estdPastisTotalDiners(View v){
         Call<Perruquer> call = mTodoService.getIdPerruquer();
         call.enqueue(new Callback<Perruquer>() {

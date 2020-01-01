@@ -61,6 +61,9 @@ public interface TodoApi {
   @POST("/clients/{id}/productes")
   Call<ResponseBody> addProductes(@Body List<Long> productes, @Path("id") String id);
 
+  @DELETE("/clients/{id}")
+  Call<ResponseBody> deleteClient(@Path("id") String id);
+
   @GET("/clients")
   Call<List<Client>> listAllClients(@Query("data1") String data1, @Query("data2") String data2);
 

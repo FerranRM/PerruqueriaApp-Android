@@ -35,10 +35,10 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                if (response.isSuccessful()) {
+                if (response.isSuccessful()) {  //Ja estem logegats
                     SplashScreen.this.startActivity(new Intent(SplashScreen.this, ActivitatClient.class));
                     SplashScreen.this.finish();
-                } else {
+                } else {    //No estem logegats
                     SplashScreen.this.startActivity(new Intent(SplashScreen.this, Login.class));
                     SplashScreen.this.finish();
                 }
@@ -46,7 +46,7 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast toast = Toast.makeText(SplashScreen.this, "Error checking login status", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(SplashScreen.this, "Error al verificar el estado de inicio de sesión", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
