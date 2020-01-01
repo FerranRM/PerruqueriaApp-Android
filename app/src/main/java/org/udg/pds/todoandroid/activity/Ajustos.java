@@ -296,7 +296,7 @@ public class Ajustos extends AppCompatActivity {
     //Pre: --
     //Post: redirigeix a l'Instagram de la perruqueria
     public void instagramPerruqueria(View view) {
-        Intent instagramIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/ferranfrm/?hl=es"));
+        Intent instagramIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/algibarbers/"));
         startActivity(instagramIntent);
     }
 
