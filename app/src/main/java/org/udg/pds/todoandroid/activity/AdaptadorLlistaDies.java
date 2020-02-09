@@ -30,7 +30,7 @@ public class AdaptadorLlistaDies extends RecyclerView.Adapter<AdaptadorLlistaDie
     }
 
     public static class ViewHolderDades extends RecyclerView.ViewHolder {
-        public ImageView mImageView;    // Recuadre on hi han les altres dades
+        public ImageView mImageView;    // Recuadre que engloba les altres dades
         public TextView mTextView1;     // Nom del client
         public TextView mTextView2;     // Hora a la que s'ha atés al client
         public ImageView mDeleteImage;  // Imatge d'esborrar

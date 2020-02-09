@@ -195,9 +195,7 @@ public class Llistat_ClientsFets extends AppCompatActivity {
     //Pre: posicio existeix a llistaReserves
     //Post: s'elimina la reserva de la BD i, per tant, del llistat actual que es mostra per pantalla.
     public void esborrarClient(int posicio) {
-       AlertDialog.Builder mBuilder = new AlertDialog.Builder(Llistat_ClientsFets.this);
-
-        Client clientEliminar = llistaClients.get(posicio);
+       Client clientEliminar = llistaClients.get(posicio);
 
         Call<ResponseBody> call = mTodoService.deleteClient(clientEliminar.getId().toString());
         call.enqueue(new Callback<ResponseBody>() {
@@ -209,6 +207,9 @@ public class Llistat_ClientsFets extends AppCompatActivity {
 
 
                     mAdapter.notifyDataSetChanged();    //Actualitzem canvis
+
+                    TextView textTotalDiners = findViewById(R.id.totalDiners);
+                    textTotalDiners.setText(" Total beneficios: "+ totalDiners + "€ ");     //Mostrem per pantalla el total de diners fets
 
                     Toast toast = Toast.makeText(Llistat_ClientsFets.this, "Client eliminat", Toast.LENGTH_SHORT);
                     toast.show();

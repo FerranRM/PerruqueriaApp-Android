@@ -100,8 +100,8 @@ public class ActivitatClient extends AppCompatActivity {
         tvPreuTotal = findViewById(R.id.textTotal);
         preuTotal = 0;
 
-        llistatTallCabells();   //Métode encarregat de llistar els tipus de tall de cabells que pot fer-se el client
-        llistatProductes();     //Métode encarregat de llistar els productes que pot comprar el client
+        llistatServeis();   // Métode encarregat de llistar tots els serveis que se li poden fer a un client
+        llistatProductes();     // Métode encarregat de llistar els productes que pot comprar el client
     }
 
 
@@ -157,12 +157,12 @@ public class ActivitatClient extends AppCompatActivity {
     }
 
     //Pre: --
-    //Post: s'encarrega del llistat de tipus de tall de cabells que pot fer-se el client
-    public void llistatTallCabells() {
+    //Post: s'encarrega del llistat de serveis que se li poden fer al client
+    public void llistatServeis() {
         botoServeis = findViewById(R.id.ButtonServeisPrestats);
         textServeisPrestats = (TextView) findViewById(R.id.tvServeisPrestats);
 
-        obtenirDadesTallCabells();
+        obtenirDadesServeis();
     }
 
     //Pre: --
@@ -174,16 +174,16 @@ public class ActivitatClient extends AppCompatActivity {
         obtenirDadesProductes();
     }
 
-    public void obtenirDadesTallCabells() {
+    public void obtenirDadesServeis() {
         Call<List<ServeiPrestat>> call = mTodoService.getServeisPrestats();
         call.enqueue(new Callback<List<ServeiPrestat>>() {
             @Override
             public void onResponse(Call<List<ServeiPrestat>> call, Response<List<ServeiPrestat>> response) {
                 if (response.isSuccessful()) {
-                    for(ServeiPrestat auxTallCabells : response.body()){
-                        llistaServeis.add(auxTallCabells);
+                    for(ServeiPrestat auxServeis : response.body()){
+                        llistaServeis.add(auxServeis);
                     }
-                    botoServeisPrestats();
+                    finestraServeisPrestats();
                 } else {
                     Toast toast = Toast.makeText(ActivitatClient.this, "Error obteniendo listado de productos", Toast.LENGTH_SHORT);
                     toast.show();
@@ -199,7 +199,7 @@ public class ActivitatClient extends AppCompatActivity {
     }
 
 
-    public void botoServeisPrestats() {
+    public void finestraServeisPrestats() {
         checkedServeis = new boolean[llistaServeis.size()];
 
         botoServeis.setOnClickListener(new View.OnClickListener() {
@@ -208,13 +208,13 @@ public class ActivitatClient extends AppCompatActivity {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ActivitatClient.this);
                 mBuilder.setTitle("Servicios prestados al cliente");
 
-                String[] arr = new String[llistaServeis.size()];
+                String[] arrServeis = new String[llistaServeis.size()];
                 for(int i=0 ; i< llistaServeis.size();i++){
-                    arr[i] = llistaServeis.get(i).getDescripcioServei();
+                    arrServeis[i] = llistaServeis.get(i).getDescripcioServei();
                 }
 
 
-                mBuilder.setMultiChoiceItems(arr, checkedServeis, new DialogInterface.OnMultiChoiceClickListener() {
+                mBuilder.setMultiChoiceItems(arrServeis, checkedServeis, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
                         if(isChecked){
@@ -342,7 +342,7 @@ public class ActivitatClient extends AppCompatActivity {
                                 item = item + ", ";
                             }
                         }
-                        textProductes.setText(item);
+                        if (!item.isEmpty()) textProductes.setText(item);
                     }
                 });
 

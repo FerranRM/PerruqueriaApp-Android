@@ -171,7 +171,7 @@ public class Estad_BarresCompararDiners extends AppCompatActivity {
 
                 if (Integer.valueOf((String) DateFormat.format("MM", auxClient.getDataClient())).equals(mesInicial+1))
                     segonaEtapa = true;
-                else
+                else if (!segonaEtapa)
                     mesosAMostrar.add(mes);
             }
             else if (mesosAMostrar.contains(mes))

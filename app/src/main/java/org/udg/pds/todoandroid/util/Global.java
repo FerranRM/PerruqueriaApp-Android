@@ -28,8 +28,8 @@ public class Global {
     // public static final String BASE_URL_PORTFORWARDING = "http://10.0.3.2:8080";
     // For debugging with real device using port forwarding
     // https://developer.chrome.com/devtools/docs/remote-debugging?hl=de#port-forwarding
-    //public static final String BASE_URL_PORTFORWARDING = "https://david-servidor.herokuapp.com";
-    public static final String BASE_URL_PORTFORWARDING = "http://localhost:8080";
+    public static final String BASE_URL_PORTFORWARDING = "https://servidor0riginal.herokuapp.com";
+    //public static final String BASE_URL_PORTFORWARDING = "http://localhost:8080";
     public static final String BASE_URL_GENYMOTION = "http://10.0.3.2:8080";
 
 

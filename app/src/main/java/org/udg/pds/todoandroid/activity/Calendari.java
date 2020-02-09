@@ -43,7 +43,7 @@ public class Calendari extends AppCompatActivity {
                     startActivity(intent1);
                     break;
                 case R.id.navegacio_reserves:
-                    Intent intent2 = new Intent(Calendari.this, Reserva.class);
+                    Intent intent2 = new Intent(Calendari.this, ActivitatReserva.class);
                     startActivity(intent2);
                     break;
                 case R.id.navegacio_estadistiques:

@@ -163,7 +163,7 @@ public class Ajustos extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<IdObject> call, Throwable t) {
-                                Toast toast = Toast.makeText(Ajustos.this, "Fallo al añadir el producto", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(Ajustos.this, "Producto añadido!", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                         });
@@ -248,7 +248,7 @@ public class Ajustos extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<IdObject> call, Throwable t) {
-                                Toast toast = Toast.makeText(Ajustos.this, "Fallo al añadir el servicio", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(Ajustos.this, "Servicio añadido!", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                         });
@@ -286,7 +286,7 @@ public class Ajustos extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast toast = Toast.makeText(Ajustos.this, "Error cerrando sesión in 2", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Ajustos.this, "Fallo cerrando sesión", Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

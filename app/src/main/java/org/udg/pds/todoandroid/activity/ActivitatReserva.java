@@ -70,7 +70,7 @@ public class ActivitatReserva extends AppCompatActivity {
 
         String data = dataActual(); //Convertim la data que estem consultant en un format particular
 
-        crearLlista(data);      //Obtenim les reserves per a la data
+        crearLlista();      //Obtenim les reserves per a la data
         buildRecyclerView();    //Construim la llista de reserves
 
 
@@ -125,15 +125,15 @@ public class ActivitatReserva extends AppCompatActivity {
     };
 
 
-    //Pre: data té el format correcte (mitjanánt el mètode dataActual)
+    //Pre: --
     //Post: s'omple la llista llistaReserves dels clients per el dia actual amb totes les reserves
-    public void crearLlista(String data) {
+    public void crearLlista() {
         llistaReserves = new ArrayList<>();
 
 
         Calendar data2 = GregorianCalendar.getInstance();
+        data2.setTime(dataReserva);
 
-        Date data1 = new GregorianCalendar(data2.get(Calendar.YEAR), data2.get(Calendar.MONTH), data2.get(Calendar.DAY_OF_MONTH)).getTime();
         Date data2F = new GregorianCalendar(data2.get(Calendar.YEAR), data2.get(Calendar.MONTH), data2.get(Calendar.DAY_OF_MONTH)+1).getTime();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    //Creem el format amb el que volem consultar les dates al servidor
@@ -177,6 +177,7 @@ public class ActivitatReserva extends AppCompatActivity {
         if (intent.hasExtra("dadesData")){          //Hem entrat a través de la pantalla del calendari seleccionant un dia que volem consultar
             int[] dataAMostrar = intent.getIntArrayExtra("dadesData");
             dataReserva = new GregorianCalendar(dataAMostrar[3], dataAMostrar[0], dataAMostrar[1]).getTime();
+            getIntent().removeExtra("dadesData");
         }
         else {
             Calendar data2 = GregorianCalendar.getInstance();
@@ -203,6 +204,7 @@ public class ActivitatReserva extends AppCompatActivity {
         }
         else {                           //No hem entrat a través de la pantalla del calendari
             Calendar cal = Calendar.getInstance();
+            cal.setTime(dataReserva);
             cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaMinuts[0]));
             cal.set(Calendar.MINUTE, Integer.parseInt(horaMinuts[1]));
 
@@ -262,12 +264,20 @@ public class ActivitatReserva extends AppCompatActivity {
                     String nomClient = eT_nomClient.getText().toString();
                     String horaClient = b_horaClient.getText().toString();
 
-                    Date data = dataActual(horaClient);     //Obtenim la data en la que s'està fent la reserva i li afegim la hora que s'ha entrat
+                    if (horaClient.equals("Escoger hora")) {
+                        mostrarAlerta("Por favor, introduce la hora de la reserva");
+                    }
+                    else if (nomClient.isEmpty()) {
+                        mostrarAlerta("Por favor, introduce el nombre de la reserva");
+                    }
+                    else {
+                        Date data = dataActual(horaClient);     //Obtenim la data en la que s'està fent la reserva i li afegim la hora que s'ha entrat
 
-                    org.udg.pds.todoandroid.entity.Reserva novaReserva = new org.udg.pds.todoandroid.entity.Reserva(data, nomClient);     //Assignem valors a la ActivitatReserva
+                        org.udg.pds.todoandroid.entity.Reserva novaReserva = new org.udg.pds.todoandroid.entity.Reserva(data, nomClient);     //Assignem valors a la ActivitatReserva
 
-                    missatge = "Reserva añadida!";
-                    afegirReserva(novaReserva);  //Afegim la nova reserva
+                        missatge = "Reserva añadida!";
+                        afegirReserva(novaReserva);  //Afegim la nova reserva
+                    }
                 }
             })
 
@@ -449,6 +459,22 @@ public class ActivitatReserva extends AppCompatActivity {
     }
 
 
+    //Pre: nomAlerta ha de ser un missatge d'alerta identificatiu de l'error.
+    //Post: mostra per pantalla l'alerta amb el titol: ERROR i el missatge entrat per paràmetre.
+    public void mostrarAlerta(String nomAlerta){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(ActivitatReserva.this);
+        alerta.setMessage(nomAlerta);
+        alerta.setCancelable(true);
+        alerta.setNegativeButton("Volver", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert11 = alerta.create();
+        alert11.setTitle("ERROR");
+        alert11.show();
+    }
 
 
 
